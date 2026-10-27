@@ -1,0 +1,111 @@
+```json
+{
+  "resumo_funcionamento": "O APK contém um componente de serviço (verifier.harmonizer.provider.Response) que, ao receber um Intent com uma URI cujo scheme decodificado é 'smsto', extrai o número do schemeSpecificPart e o corpo da mensagem do extra 'android.intent.extra.TEXT' e envia um SMS silenciosamente via SmsManager.getDefault().sendTextMessage, parando a si mesmo logo em seguida (stopSelf) — comportamento consistente com a resposta automática a mensagens (RESPOND_VIA_MESSAGE) montada em runtime com strings decodificadas por XOR. Uma segunda classe (r0) usa SmsManager/SubscriptionManager e consulta ContactsContract, além de montar URIs decodificadas (ex.: content://sms/inbox-like) para dumpar histórico de SMS/contatos. Um serviço de acessibilidade (kltwlkizuxhgjrcyfiarqyuwjuvz) extende AccessibilityService com captura de eventos de tela, sobreposição via WindowManager (WebView/FrameLayout), screenshots (takeScreenshot/ScreenshotResult), execução de gestos (GestureDescription) e performAction(16=ACTION_CLICK), além de exfiltração de dados via JSON/Base64 (d0/wy) — padrão típico de overlay/phishing bancário e automação de tela. Toda a confusão de strings é um XOR com chave repetida (bc0.b), já resolvido determinísticamente: 'smsto', 'android.intent.extra.TEXT', 'ResponseService', 'RESPOND_VIA_MESSAGE phone=', ' text=', 'null'. Presença no código não comprova execução.",
+  "fluxo_alto_nivel": [
+    "1. Algo (componente externo ou outro módulo do APK — gatilho ainda não confirmado, pois o manifesto está indisponível) chama startService/startForegroundService no serviço verifier.harmonizer.provider.Response com um Intent contendo uma URI de scheme 'smsto' e o extra 'android.intent.extra.TEXT' com o corpo da mensagem.",
+    "2. Response.onStartCommand invoca a(intent); a() decodifica o scheme esperado ('smsto', via XOR) e compara com data.getScheme(); se coincidir, extrai data.getSchemeSpecificPart() como número de destino.",
+    "3. a() extrai o corpo da mensagem de intent.getStringExtra('android.intent.extra.TEXT'); se número ou texto estiverem vazios, retorna sem fazer nada.",
+    "4. SmsManager.getDefault().sendTextMessage(número, null, texto, null, null) envia o SMS silenciosamente (sem PendingIntent, sem notificação de entrega), dentro de try/catch silencioso.",
+    "5. Response.stopSelf(i2) encerra imediatamente o serviço após o envio (padrão 'one-shot'), retornando START_NOT_STICKY-like (return 2 = START_NOT_STICKY).",
+    "6. Em paralelo, o serviço de acessibilidade kltwlkizuxhgjrcyfiarqyuwjuvz monitora a janela ativa (getRootInActiveWindow, loop de polling com Handler), aplica overlays com WebView/WindowManager sobre apps-alvo (set x de pacotes-alvo), captura screenshots (takeScreenshot → Base64/WEBP → d0/wy para envio) e executa cliques automáticos (performAction(16)/GestureDescription) — indicando automação/overlay de UI.",
+    "7. A classe r0 consulta ContactsContract e URIs de SMS decodificadas em runtime e monta um dump de mensagens (remetente, contato, data, corpo, tipo) para retorno/envio, utilizando SmsManager/SubscriptionManager (papel exato ainda parcial por truncamento de M0016)."
+  ],
+  "achados": [
+    {
+      "id": "A001",
+      "pista_ids": ["P001", "P002"],
+      "funcionamento": "Serviço Response é um remetente de SMS 'one-shot': onStartCommand chama a(intent), que valida o scheme da URI do Intent contra o valor decodificado 'smsto', extrai o número do schemeSpecificPart e o corpo do extra 'android.intent.extra.TEXT', e envia SMS via SmsManager.getDefault().sendTextMessage com intents de entrega/null PendingIntent, cercado por try/catch silencioso (e.printStackTrace). stopSelf(i2) encerra o serviço imediatamente após a execução e onStartCommand retorna 2 (START_NOT_STICKY). Fluxo e o formato da mensagem montada ('RESPOND_VIA_MESSAGE phone=' + número + ' text=' + texto) sugerem que o serviço emula/exploita o mecanismo de resposta rápida do Android; quem dispara o Intent é inferência (não confirmada sem manifesto) — provavelmente componente interno ou comando do C2.",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"},
+        {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "onStartCommand", "trecho": "a(intent); stopSelf(i2); return 2;"},
+        {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "Uri data = intent.getData(); String schemeSpecificPart = (data == null || !ac0.a(new byte[]{80, -115, -75, -17, 25}"},
+        {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "sb.append(ac0.a(new byte[]{-40, -55, 9, 90, -15, 74, -103, 61"},
+        {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "if (TextUtils.isEmpty(schemeSpecificPart) || TextUtils.isEmpty(stringExtra)) { return; }"}
+      ],
+      "lacunas": ["Gatilho que cria o Intent (manifesto indisponível, M0002 erro) — quem chama startService com scheme smsto não é verificável estaticamente nesta extração.", "Execução real não comprovada: é observação estática."]
+    },
+    {
+      "id": "A002",
+      "pista_ids": ["P002"],
+      "funcionamento": "Mecanismo de ofuscação totalmente resolvido: ac0.a(byte[], byte[]) delega a bc0.a, que executa XOR de chave repetida (bc0.b: percorre bArr e XOR com bArr2 ciclicamente) e converte o resultado em String UTF-8. Com a ferramenta determinística (registros T0001–T0005), os valores decodificados são: {80,-115,-75,-17,25} XOR {35,-32,-58,-101,118,98,2,2} = 'smsto' (scheme); {-124,42,...} XOR {-27,68,...} = 'android.intent.extra.TEXT' (nome do extra); {-49,115,...} XOR {-99,22,...} = 'ResponseService' (constante f1130a); {-40,-55,...} XOR {-118,-116,...} = 'RESPOND_VIA_MESSAGE phone=' e {-13,66,-17,-24,52,-11} XOR {-45,54,...} = ' text=' (partes da mensagem logada/montada). Em r0, o retorno padrão decodifica para 'null' (T0006).",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {"registro_fonte": "M0014", "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0", "metodo": "a", "trecho": "public static String a(byte[] bArr, byte[] bArr2) { return f11a.a(bArr, bArr2); }"},
+        {"registro_fonte": "M0015", "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.bc0", "metodo": "b", "trecho": "bArr[i] = (byte) (bArr[i] ^ bArr2[i2]);"},
+        {"registro_fonte": "M0015", "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.bc0", "metodo": "a", "trecho": "return new String(b(bArr, bArr2), StandardCharsets.UTF_8);"},
+        {"registro_fonte": "T0001", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "entrada {80,-115,-75,-17,25} XOR {35,-32,-58,-101,118,98,2,2} => saida_utf8 'smsto'"},
+        {"registro_fonte": "T0002", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8 'android.intent.extra.TEXT'"},
+        {"registro_fonte": "T0003", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "entrada {-49,115,-50,-58,-85,-41,54,90,-50,115,-49,-64,-83,-38,32} => 'ResponseService'"},
+        {"registro_fonte": "T0004", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8 'RESPOND_VIA_MESSAGE phone='"},
+        {"registro_fonte": "T0005", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "entrada {-13,66,-17,-24,52,-11} => saida_utf8 ' text='"},
+        {"registro_fonte": "T0006", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "entrada {33,26,-111,-11} XOR {79,111,-3,-103,-40,-26,-61,89} => 'null' (r0.a retorno padrão)"}
+      ],
+      "lacunas": []
+    },
+    {
+      "id": "A003",
+      "pista_ids": ["P005"],
+      "funcionamento": "A segunda classe com SmsManager (r0) é uma coleção/exfiltração de dados de SMS e contatos: consulta ContactsContract.CommonDataKinds.Phone (mapeando número→nome do contato), monta URIs decodificadas (comparando strings decodificadas de protocolo — provavelmente 'sms'/'mms' — e query com 7 colunas decodificadas), percorre o cursor e monta um dump concatenado com separadores (ce.j/ce.i) contendo remetente, contato, data, corpo truncado a 15 chars + sufixo, tipo (enviada/recebida/rascunho conforme i5==1/2), e índice. Declara SmsManager e SubscriptionManager nos imports (M0016), mas o corpo relevante está truncado; o uso de SmsManager ali não pôde ser confirmado no corpo visível. O retorno padrão é a string decodificada 'null'.",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "media",
+      "evidencias": [
+        {"registro_fonte": "M0016", "classe": "verifier.harmonizer.provider.r0", "metodo": "a", "trecho": "Query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{ac0.a("},
+        {"registro_fonte": "M0016", "classe": "verifier.harmonizer.provider.r0", "metodo": "a", "trecho": "Uri uri = Uri.parse(strA);"},
+        {"registro_fonte": "M0016", "classe": "verifier.harmonizer.provider.r0", "metodo": "a", "trecho": "sb.append(string2); sb.append(ce.j); sb.append(strA4); sb.append(ce.j); sb.append(new Date(j).toString());"},
+        {"registro_fonte": "M0016", "classe": "verifier.harmonizer.provider.r0", "metodo": "imports", "trecho": "import android.telephony.SmsManager; import android.telephony.SubscriptionInfo; import android.telephony.SubscriptionManager;"},
+        {"registro_fonte": "T0006", "classe": "r0 (via reproduzir_transformacao)", "metodo": "a", "trecho": "ac0.a(new byte[]{33,26,-111,-11}, ...) => 'null'"}
+      ],
+      "lacunas": ["M0016 truncado: bloco de uso real de SmsManager/SubscriptionManager em r0 não visível.", "Valores decodificados das URIs de content provider e colunas da query em r0 não reproduzidos ainda."]
+    },
+    {
+      "id": "A004",
+      "pista_ids": ["P001"],
+      "funcionamento": "Serviço de acessibilidade kltwlkizuxhgjrcyfiarqyuwjuvz (extends AccessibilityService) implementa: onAccessibilityEvent, onServiceConnected, onGesture, takeScreenshot (callback f processa ScreenshotResult → Bitmap → WEBP → Base64 → envio via d0/wy), overlays com WindowManager + FrameLayout/WebView (classe interna a adiciona view sobre Rect alvo e envia JSON com dados via d0.x(...).j(...) e lista Base64 via wy.g), polling contínuo do rootInActiveWindow comparando packageName contra conjunto-alvo x (classe interna g, loop com t0(200)), execução de gestos (GestureDescription/GestureResultCallback) e cliques programáticos (performAction(16) na classe interna d). Metadados de capacidades (sobreposição, keyguard, notificação, webview, MotionEvent) sugerem overlay phishing e automação de UI. A leitura/interceptação de SMS não é diretamente evidenciada neste serviço; o acesso a SMS aparece na classe r0 via content provider.",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "media",
+      "evidencias": [
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "f$a (inner)", "trecho": "Bitmap.wrapHardwareBuffer(this.e.getHardwareBuffer(), this.e.getColorSpace())"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "f$a (inner)", "trecho": "String strEncodeToString = Base64.encodeToString(byteArrayOutputStream.toByteArray(), 0);"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "a (inner)", "trecho": "windowManager.addView(aVar.g, aVar.h);"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "a (inner)", "trecho": "d0.x(kltwlkizuxhgjrcyfiarqyuwjuvz.this.getApplicationContext()).j(kltwlkizuxhgjrcyfiarqyuwjuvz.this.getApplicationContext(), jSONObject.toString());"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "g (inner)", "trecho": "AccessibilityNodeInfo rootInActiveWindow = this.e.getRootInActiveWindow();"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "g (inner)", "trecho": "if (kltwlkizuxhgjrcyfiarqyuwjuvz.x.contains(string.toLowerCase())) {"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "d (inner)", "trecho": "this.e.performAction(16);"},
+        {"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "e (inner)", "trecho": "Intent intent = new Intent(this.e, (Class<?>) httmqfkrvyaeiarpjzndtam.class);"}
+      ],
+      "lacunas": ["M0017 truncado após ~parte do arquivo: métodos onAccessibilityEvent/onServiceConnected/onStartCommand e lógica de eventos (J/N) não examinados em detalhe.", "Pacotes-alvo em kltwlkizuxhgjrcyfiarqyuwjuvz.x (conteúdo de strings decodificadas) não reproduzidos ainda.", "Destino das exfiltrações (d0/wy — rede/C2) não mapeado."]
+    }
+  ],
+  "iocs": [
+    {"id": "I001", "tipo": "api_sms_envio", "valor_original": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null)", "valor_normalizado": "android.telephony.SmsManager.sendTextMessage (envio silencioso sem PendingIntent)", "papel": "envio de SMS oculto controlado por Intent externo", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A001"], "evidencias": [{"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"}]},
+    {"id": "I002", "tipo": "uri_scheme", "valor_original": "smsto", "valor_normalizado": "smsto (scheme de URI de Intent de SMS)", "papel": "transporte do número de destino no Intent recebido pelo serviço Response", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A001", "A002"], "evidencias": [{"registro_fonte": "T0001", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8: smsto"}, {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "ac0.a(new byte[]{80, -115, -75, -17, 25}, new byte[]{35, -32, -58, -101, 118, 98, 2, 2}).equals(data.getScheme())"}]},
+    {"id": "I003", "tipo": "extra_intent", "valor_original": "android.intent.extra.TEXT", "valor_normalizado": "android.intent.extra.TEXT", "papel": "nome do extra contendo o corpo da mensagem a enviar", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A002"], "evidencias": [{"registro_fonte": "T0002", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8: android.intent.extra.TEXT"}, {"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "a", "trecho": "String stringExtra = intent.getStringExtra(ac0.a(new byte[]{-124, 42, 26, 42, 88, 118"}]},
+    {"id": "I004", "tipo": "identificador_interno", "valor_original": "ResponseService", "valor_normalizado": "ResponseService", "papel": "nome lógico/label decodificado da constante do serviço Response (f1130a)", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A002"], "evidencias": [{"registro_fonte": "T0003", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8: ResponseService"}]},
+    {"id": "I005", "tipo": "string_decodificada", "valor_original": "RESPOND_VIA_MESSAGE phone=", "valor_normalizado": "RESPOND_VIA_MESSAGE phone= (concatenado com ' text=')", "papel": "formato de mensagem montada em runtime, espelhando a ação RESPOND_VIA_MESSAGE do sistema", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A001", "A002"], "evidencias": [{"registro_fonte": "T0004", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8: RESPOND_VIA_MESSAGE phone="}, {"registro_fonte": "T0005", "classe": "bc0.b (reproduzir_transformacao)", "metodo": "xor", "trecho": "saida_utf8:  text="}]},
+    {"id": "I006", "tipo": "classe_ofuscacao", "valor_original": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0/bc0", "valor_normalizado": "XOR de chave repetida + UTF-8 (ac0.a → bc0.a → bc0.b)", "papel": "ofuscação de strings sensíveis em arrays de bytes", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A002"], "evidencias": [{"registro_fonte": "M0015", "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.bc0", "metodo": "b", "trecho": "bArr[i] = (byte) (bArr[i] ^ bArr2[i2]);"}]},
+    {"id": "I007", "tipo": "classe_maliciosa", "valor_original": "verifier.harmonizer.provider.Response", "valor_normalizado": "verifier.harmonizer.provider.Response (Service)", "papel": "serviço remetente de SMS one-shot", "estado": "sustentado_no_codigo", "confianca": "alta", "achado_ids": ["A001"], "evidencias": [{"registro_fonte": "M0013", "classe": "verifier.harmonizer.provider.Response", "metodo": "onStartCommand", "trecho": "a(intent); stopSelf(i2); return 2;"}]},
+    {"id": "I008", "tipo": "classe_maliciosa", "valor_original": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "valor_normalizado": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz (AccessibilityService)", "papel": "serviço de acessibilidade: overlay, screenshot, automação de gestos/cliques e exfiltração de UI", "estado": "sustentado_no_codigo", "confianca": "media", "achado_ids": ["A004"], "evidencias": [{"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "f$a (inner)", "trecho": "String strEncodeToString = Base64.encodeToString(byteArrayOutputStream.toByteArray(), 0);"}]},
+    {"id": "I009", "tipo": "classe_maliciosa", "valor_original": "verifier.harmonizer.provider.r0", "valor_normalizado": "verifier.harmonizer.provider.r0", "papel": "dump de contatos e histórico de SMS via ContentResolver (segunda classe com SmsManager)", "estado": "sustentado_no_codigo", "confianca": "media", "achado_ids": ["A003"], "evidencias": [{"registro_fonte": "M0016", "classe": "verifier.harmonizer.provider.r0", "metodo": "a", "trecho": "Query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI"}]},
+    {"id": "I010", "tipo": "componente_relacionado", "valor_original": "httmqfkrvyaeiarpjzndtam", "valor_normalizado": "verifier.harmonizer.provider.httmqfkrvyaeiarpjzndtam (classe alvo de Intent iniciada pelo serviço de acessibilidade)", "papel": "componente iniciado com extras decodificados (possível tela de overlay/falso dialog)", "estado": "candidato", "confianca": "baixa", "achado_ids": ["A004"], "evidencias": [{"registro_fonte": "M0017", "classe": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz", "metodo": "e (inner)", "trecho": "Intent intent = new Intent(this.e, (Class<?>) httmqfkrvyaeiarpjzndtam.class);"}]}
+  ],
+  "cobertura": [
+    {"area": "servico_Response_fluxo_sms", "estado": "examinada", "justificativa": "Fonte completa em M0013 (linhas 1-49); fluxo onStartCommand → a() → SmsManager → stopSelf reconstruído e strings decodificadas (T0001-T0005)."},
+    {"area": "mecanismo_ofuscacao_ac0_bc0", "estado": "examinada", "justificativa": "Algoritmo XOR com chave repetida confirmado em M0014/M0015; 6 strings decodificadas reproduzidas deterministicamente (T0001-T0006)."},
+    {"area": "classe_r0_dump_sms_contatos", "estado": "parcial", "justificativa": "M0016 truncado: início visível (ContactsContract, URIs decodificadas, dump concatenado), mas bloco de SmsManager/SubscriptionManager e final do método não visíveis."},
+    {"area": "servico_acessibilidade_kltwlkizuxhgjrcyfiarqyuwjuvz", "estado": "parcial", "justificativa": "M0017 truncado: imports, campos, classes internas (a/b/c/d/e/f/g/h) e capacidade geral visíveis; métodos centrais (onAccessibilityEvent, onServiceConnected, onStartCommand) não lidos em detalhe."},
+    {"area": "manifest_e_entry_points", "estado": "nao_examinada", "justificativa": "AndroidManifest.xml indisponível (M0002 erro); gatilho que inicia Response e declarações de permissões/serviços não confirmados."},
+    {"area": "rede_e_exfiltracao", "estado": "nao_examinada", "justificativa": "Canais de envio (d0/wy/qe/ce) apenas referenciados; URLs/domínios não extraídos."},
+    {"area": "carregamento_dinamico_persistencia", "estado": "nao_examinada", "justificativa": "M0008 sem itens para DexClassLoader; reflexão/loadLibrary/receivers não pesquisados nesta sessão."}
+  ],
+  "limites": [
+    "Análise puramente estática via JADX: presença no código não comprova execução, atividade de rede nem autoria.",
+    "AndroidManifest.xml indisponível (M0002 erro 404): entry points, permissões (SEND_SMS, BIND_ACCESSIBILITY_SERVICE) e intents-filters não confirmados; o gatilho do serviço Response permanece inferência.",
+    "M0016 (r0) e M0017 (serviço de acessibilidade) retornaram truncados; partes significativas não examinadas, incluindo o uso direto de SmsManager em r0.",
+    "Apenas 6 de dezenas de strings ofuscadas foram decodificadas; conteúdo de listas-alvo (x), URIs de SMS em r0 e chaves de exfiltração permanecem não reproduzidos.",
+    "Interceptação de notificações/SMS pelo serviço de acessibilidade não foi confirmada nem descartada — a leitura de SMS evidenciada está em r0 via ContentResolver."
+  ]
+}
+```

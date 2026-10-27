@@ -1,0 +1,1 @@
+Strings resolved: scheme "smsto", extra "android.intent.extra.TEXT", log tag "ResponseService", "RESPOND_VIA_MESSAGE phone=", " text=". This looks like a RespondViaSmsManager-like handler (legitimate app pattern mimicking default SMS response?), but combined with accessibility. Now examine r0 and accessibility service.

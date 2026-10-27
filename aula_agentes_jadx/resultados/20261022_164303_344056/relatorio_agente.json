@@ -1,0 +1,42 @@
+{
+  "resumo_executivo": "APK Android (SHA-256 ec033c13f06bcccb3d35b46c56003a60516339419ccc75a3738bbcf7f83e52b8), pacote raiz verifier.harmonizer.provider, 699 pacotes/3574 classes (árvore truncada), analisado estaticamente via JADX em 3 rodadas de hunt, 2 rodadas de análise aprofundada e 8 transformações determinísticas de decodificação. O conjunto de módulos é consistente com RAT bancário Android: serviço de acessibilidade com overlay/screenshot/gestos/exfiltração, envio silencioso de SMS, dump de contatos/SMS, canal de configuração remota Base64 ('empty|' inicial), download de payload disfarçado de atualização ('Searching for updates') e autodestruição via 'pm clear ' + packageName confirmada por decodificação XOR (T0007). Ofuscação em camadas: XOR com chave repetida (ac0.a→f11a.a), Base64, Unicode, nomes aleatórios e pacote profundo de decodificação. Indício de operação dirigida a falantes de português: _Login_title_ (Base64, I006) decodifica 'Serviço de Acessibilidade'. Presença no código não comprova execução, tráfego de rede nem autoria.",
+  "funcionamento_alto_nivel": "1. [ESTÁTICO SUSTENTADO — A004/A005/I007] Config remota: zfyxetnpqczwwesatwnjdr.onStartCommand lê lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv (inicial 'empty|'), decodifica entradas Base64 com charset XOR, popula kltwlkizuxhgjrcyfiarqyuwjuvz.x (pacotes-alvo overlay, minúsculas), configura módulos e inicia serviço foreground kiezkyvaplpxfgcszohglq; se a config começa com valor decodificado 'empty|'-like, desativa (wy.f(..., false)). 2. [HIPÓTESE] Origem da atualização da config (rede/C2) inferida do parsing e dos múltiplos consumidores via xrefs (M0031/M0041); classe escritora e endpoint não identificados. 3. [ESTÁTICO SUSTENTADO/PARCIAL — I004] Serviço de acessibilidade kltwlkizuxhgjrcyfiarqyuwjuvz: polling de rootInActiveWindow contra conjunto-alvo x, overlays WindowManager+FrameLayout/WebView, screenshots (takeScreenshot→Bitmap→WEBP/Base64), envio JSON via d0/wy, gestos e performAction(16); inicia httmqfkrvyaeiarpjzndtam via Intent (candidato a falso diálogo — baixa confiança). Retornos truncados (M0012/M0017) impediram leitura integral. 4. [ESTÁTICO SUSTENTADO — A001/I003] Serviço Response: valida scheme 'smsto' (XOR, T0001), extrai número (schemeSpecificPart) e corpo (extra 'android.intent.extra.TEXT', T0002), envia SMS silencioso via SmsManager.getDefault().sendTextMessage sem PendingIntent, try/catch silencioso, stopSelf + START_NOT_STICKY. Gatilho NÃO confirmado (manifesto indisponível); consistência com resposta automática de mensagens é inferência. 5. [ESTÁTICO PARCIAL — A003] r0: query a ContactsContract.CommonDataKinds.Phone e URIs de SMS decodificadas em runtime, dump concatenado; método truncado (M0029), uso integral de SmsManager não visível. 6. [ESTÁTICO PARCIAL — P009] DownloadForegroundService: HttpURLConnection/URL/FileOutputStream, serviço foreground com notificação; disfarce 'Searching for updates' (string decodificada, T0008 — candidato, associação byte-a-byte não revalidada); URL real não extraída (candidato — string XOR de 21 bytes não reproduzida). 7. [ESTÁTICO SUSTENTADO — A008/I001/I005] Autodestruição cafaiezlhmdcjcdp: Runtime.exec('pm clear ' + packageName) — decodificação XOR confirmada por T0007; deleção recursiva de filesDir/arquivos e bancos; System.exit(1); método b alterna flags do serviço de acessibilidade (kltwlkizuxhgjrcyfiarqyuwjuvz.b0). Gatilho NÃO determinado. 8. [ESTÁTICO SUSTENTADO — A007/P002/P010] Ofuscação em camadas: XOR com chave repetida (ac0.a→f11a.a; f11a não localizada — M0043/M0044 404 — validação indireta pelas transformações), Base64 na config, Unicode, nomes de classes/campos aleatórios, pacote profundo a.b.c...bababa. 9. [NÃO EXAMINADO] Carregamento dinâmico (DexClassLoader sem resultados, M0008), reflexão, loadLibrary, BOOT_COMPLETED (sem resultados, M0030 — ausência de literal não descarta receiver), NotificationListenerService não verificado.",
+  "achado_ids": [
+    "A001",
+    "A003",
+    "A004",
+    "A005",
+    "A007",
+    "A008"
+  ],
+  "ioc_ids": [
+    "I001",
+    "I003",
+    "I004",
+    "I005",
+    "I006",
+    "I007"
+  ],
+  "limitacoes": [
+    "Análise puramente estática via JADX: presença no código não comprova execução, atividade de rede nem autoria.",
+    "AndroidManifest.xml indisponível (M0002, erro 404): entry points, permissões (SEND_SMS, BIND_ACCESSIBILITY_SERVICE etc.) e intent-filters não confirmados; gatilhos do serviço Response (A001) e da autodestruição (A008) não determinados.",
+    "Retornos truncados: M0001 (árvore), M0012/M0017 (serviço de acessibilidade), M0020 (d0), M0029 (r0), M0033, M0036 (smali do AsyncTask), M0038 (o0), M0039 (DownloadForegroundService) — partes relevantes não examinadas.",
+    "M0032 vazio e M0034 sem corpo: lógica interna do AsyncTask kiezkyvaplpxfgcszohglq.d não lida; M0035 falhou (404).",
+    "Classe f11a (implementação XOR) não localizada pelo índice (M0043/M0044, 404); algoritmo validado apenas indiretamente pelas transformações determinísticas.",
+    "Limite de 8 receitas de transformação: a maioria das strings ofuscadas (listas-alvo x, URL de download, demais mensagens) permanece não decodificada.",
+    "IOC de rede AUSENTE: nenhum domínio/URL/IP literal extraído; busca por 'https://' vazia (M0021); URL provavelmente XOR-ofuscada. Ausência de literais não descarta comunicação C2 (M0021, M0030).",
+    "IOCs candidatos de baixa confiança não incluídos no índice de IOCs sustentados: httmqfkrvyaeiarpjzndtam (falso diálogo) e string XOR de 21 bytes do DownloadForegroundService (URL) — registrar como candidatos apenas.",
+    "Pistas P002 e P009 permanecem sem achado com evidência conferida; mantidas como pistas.",
+    "Consulta M0026 falhou (campo tratado como método); ipqzpdjermcdvtbjxigpvizdmyv é campo estático."
+  ],
+  "proximos_passos": [
+    "Obter AndroidManifest.xml por via alternativa (extração direta do APK com apktool/androguard) para confirmar entry points, permissões e intent-filters, inclusive o gatilho do serviço Response (A001/I003).",
+    "Decodificar as strings XOR restantes reimplementando o algoritmo ac0.a/f11a.a localmente (sem limite de receitas), em especial a string de 21 bytes de DownloadForegroundService (possível URL de C2/download) e as listas-alvo de kltwlkizuxhgjrcyfiarqyuwjuvz.x.",
+    "Examinar integralmente r0 (M0029 truncado) para confirmar dump de contatos/SMS e o destino/exfiltração dos dados.",
+    "Mapear a origem da atualização de ipqzpdjermcdvtbjxigpvizdmyv/ALL_CONFIG (classe escritora e endpoint de rede) — hipótese (a) —, inclusive via xrefs adicionais e análise de d0/o0/wy.",
+    "Determinar o gatilho da rotina de autodestruição cafaiezlhmdcjcdp.e (A008/I005) e as condições de invocação.",
+    "Verificar httmqfkrvyaeiarpjzndtam como tela de overlay/falso diálogo (candidato, baixa confiança).",
+    "Pesquisar carregamento dinâmico, reflexão, loadLibrary e receivers (DexClassLoader, BOOT_COMPLETED) com buscas complementares.",
+    "Validar em sandbox (dinâmico) a execução dos módulos: envio silencioso de SMS, overlay, screenshot WEBP/Base64 e 'pm clear' — presença estática não comprova execução."
+  ]
+}

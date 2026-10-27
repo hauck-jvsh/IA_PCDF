@@ -1,0 +1,3 @@
+Let me first check the XOR algorithm from M0014/M0015 to know the recipe, then use reproduzir_transformacao.
+
+The algorithm: ac0.a(bArr, bArr2) = f11a.a — XOR with repeated key? Need to verify. Earlier session decoded 'smsto' from {80,-115,-75,-17,25} with key {35,-32,-58,-101,118,98,2,2}: 80^35=115='s'; -115 as byte = 141; 141^(-32=224)=141^224=117='u'; -75=181; 181^(-101=155)=181^155=38... hmm 181^155 = 0b10110101^0b10011011=0b00101110=46, not 't'. So not simple XOR with key[0]... maybe key repeats and f11a.a does something else. Let me fetch the source of f11a / bc0.

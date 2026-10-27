@@ -1,0 +1,131 @@
+{"utc": "2026-10-22T19:43:30.150251+00:00", "tipo": "mcp_inicio", "registro": "M0001", "tool": "get_package_tree"}
+{"utc": "2026-10-22T19:43:30.659569+00:00", "tipo": "mcp", "registro": "M0001", "tool": "get_package_tree"}
+{"utc": "2026-10-22T19:43:39.945040+00:00", "tipo": "mcp_inicio", "registro": "M0002", "tool": "get_resource_file"}
+{"utc": "2026-10-22T19:43:40.872346+00:00", "tipo": "mcp", "registro": "M0002", "tool": "get_resource_file"}
+{"utc": "2026-10-22T19:43:47.610985+00:00", "tipo": "mcp_inicio", "registro": "M0003", "tool": "get_all_resource_file_names"}
+{"utc": "2026-10-22T19:43:48.515752+00:00", "tipo": "mcp", "registro": "M0003", "tool": "get_all_resource_file_names"}
+{"utc": "2026-10-22T19:43:57.189723+00:00", "tipo": "mcp_inicio", "registro": "M0004", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:43:57.669874+00:00", "tipo": "mcp", "registro": "M0004", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:01.541339+00:00", "tipo": "mcp_inicio", "registro": "M0005", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:01.968946+00:00", "tipo": "mcp", "registro": "M0005", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:05.538968+00:00", "tipo": "mcp_inicio", "registro": "M0006", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:05.946764+00:00", "tipo": "mcp", "registro": "M0006", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:09.830114+00:00", "tipo": "mcp_inicio", "registro": "M0007", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:10.233435+00:00", "tipo": "mcp", "registro": "M0007", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:14.721191+00:00", "tipo": "mcp_inicio", "registro": "M0008", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:15.242289+00:00", "tipo": "mcp", "registro": "M0008", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:19.859792+00:00", "tipo": "mcp_inicio", "registro": "M0009", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:44:20.305929+00:00", "tipo": "mcp", "registro": "M0009", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:44:24.213426+00:00", "tipo": "mcp_inicio", "registro": "M0010", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:44:24.909034+00:00", "tipo": "mcp", "registro": "M0010", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:44:29.301157+00:00", "tipo": "mcp_inicio", "registro": "M0011", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:29.744092+00:00", "tipo": "mcp", "registro": "M0011", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:44:33.496768+00:00", "tipo": "mcp_inicio", "registro": "M0012", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:34.029451+00:00", "tipo": "mcp", "registro": "M0012", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:44:34.036510+00:00", "tipo": "saida_sem_json", "tool": "Hunt", "erro": "A resposta final não contém um objeto JSON", "texto": ""}
+{"utc": "2026-10-22T19:45:00.792885+00:00", "tipo": "formatacao", "tool": "Hunt", "retornos": 12}
+{"utc": "2026-10-22T19:45:00.799376+00:00", "tipo": "pistas_descartadas", "tool": "Hunt", "descartes": [{"pista": "P003", "motivos": ["M0007: fonte ausente ou com erro"]}, {"pista": "P004", "motivos": ["M0012: trecho não consta da fonte"]}, {"pista": "P006", "motivos": ["M0002: fonte ausente ou com erro"]}]}
+{"utc": "2026-10-22T19:45:00.809021+00:00", "tipo": "hunt_concluido", "versao": 1}
+{"utc": "2026-10-22T19:46:19.730451+00:00", "tipo": "mcp_inicio", "registro": "M0013", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:46:20.233057+00:00", "tipo": "mcp", "registro": "M0013", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:46:23.274062+00:00", "tipo": "mcp_inicio", "registro": "M0014", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:46:23.703304+00:00", "tipo": "mcp", "registro": "M0014", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:46:27.668167+00:00", "tipo": "mcp_inicio", "registro": "M0015", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:46:28.106824+00:00", "tipo": "mcp", "registro": "M0015", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:47:11.126819+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "ValueError: non-hexadecimal number found in fromhex() arg at position 0"}
+{"utc": "2026-10-22T19:47:12.897648+00:00", "tipo": "transformacao", "registro": "T0001", "origens": ["M0013"]}
+{"utc": "2026-10-22T19:47:15.416204+00:00", "tipo": "transformacao", "registro": "T0002", "origens": ["M0013"]}
+{"utc": "2026-10-22T19:47:17.665027+00:00", "tipo": "transformacao", "registro": "T0003", "origens": ["M0013"]}
+{"utc": "2026-10-22T19:47:20.222263+00:00", "tipo": "transformacao", "registro": "T0004", "origens": ["M0013"]}
+{"utc": "2026-10-22T19:47:22.266323+00:00", "tipo": "transformacao", "registro": "T0005", "origens": ["M0013"]}
+{"utc": "2026-10-22T19:47:24.397955+00:00", "tipo": "mcp_inicio", "registro": "M0016", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:47:24.907256+00:00", "tipo": "mcp", "registro": "M0016", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:47:29.249174+00:00", "tipo": "mcp_inicio", "registro": "M0017", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:47:29.750685+00:00", "tipo": "mcp", "registro": "M0017", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:47:35.900300+00:00", "tipo": "transformacao", "registro": "T0006", "origens": ["M0016"]}
+{"utc": "2026-10-22T19:47:37.710148+00:00", "tipo": "mcp_inicio", "registro": "M0018", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:47:38.232267+00:00", "tipo": "mcp", "registro": "M0018", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:49:14.472988+00:00", "tipo": "itens_descartados", "tool": "Analista", "descartes": [{"achado": "A001", "motivos": ["M0013: trecho não consta da fonte", "M0013: trecho não consta da fonte", "M0013: trecho não consta da fonte"]}, {"achado": "A002", "motivos": ["M0014: trecho não consta da fonte", "T0001: trecho não consta da fonte", "T0002: trecho não consta da fonte", "T0003: trecho não consta da fonte", "T0004: trecho não consta da fonte", "T0005: trecho não consta da fonte", "T0006: trecho não consta da fonte"]}, {"achado": "A003", "motivos": ["T0006: trecho não consta da fonte"]}, {"ioc": "I001", "motivos": ["cita achado inexistente ou descartado"]}, {"ioc": "I002", "motivos": ["T0001: trecho não consta da fonte", "cita achado inexistente ou descartado"]}, {"ioc": "I003", "motivos": ["T0002: trecho não consta da fonte", "cita achado inexistente ou descartado"]}, {"ioc": "I004", "motivos": ["T0003: trecho não consta da fonte", "cita achado inexistente ou descartado"]}, {"ioc": "I005", "motivos": ["T0004: trecho não consta da fonte", "T0005: trecho não consta da fonte", "cita achado inexistente ou descartado"]}, {"ioc": "I006", "motivos": ["cita achado inexistente ou descartado"]}, {"ioc": "I007", "motivos": ["M0013: trecho não consta da fonte", "cita achado inexistente ou descartado"]}, {"ioc": "I009", "motivos": ["cita achado inexistente ou descartado"]}]}
+{"utc": "2026-10-22T19:49:14.474994+00:00", "tipo": "analise_concluida", "versao": 1}
+{"utc": "2026-10-22T19:49:47.946194+00:00", "tipo": "mcp_inicio", "registro": "M0019", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:49:48.390140+00:00", "tipo": "mcp", "registro": "M0019", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:49:52.792259+00:00", "tipo": "mcp_inicio", "registro": "M0020", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:49:53.401608+00:00", "tipo": "mcp", "registro": "M0020", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:49:59.154638+00:00", "tipo": "mcp_inicio", "registro": "M0021", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:49:59.651575+00:00", "tipo": "mcp", "registro": "M0021", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:50:04.120286+00:00", "tipo": "mcp_inicio", "registro": "M0022", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:50:04.547217+00:00", "tipo": "mcp", "registro": "M0022", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:50:09.495135+00:00", "tipo": "mcp_inicio", "registro": "M0023", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:50:10.013627+00:00", "tipo": "mcp", "registro": "M0023", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:50:14.491053+00:00", "tipo": "mcp_inicio", "registro": "M0024", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:50:14.994247+00:00", "tipo": "mcp", "registro": "M0024", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:50:20.290610+00:00", "tipo": "mcp_inicio", "registro": "M0025", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:50:20.778366+00:00", "tipo": "mcp", "registro": "M0025", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:50:26.020496+00:00", "tipo": "mcp_inicio", "registro": "M0026", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:50:26.488259+00:00", "tipo": "mcp", "registro": "M0026", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:50:31.540666+00:00", "tipo": "mcp_inicio", "registro": "M0027", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:50:31.966794+00:00", "tipo": "mcp", "registro": "M0027", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:50:36.745160+00:00", "tipo": "mcp_inicio", "registro": "M0028", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:50:37.259885+00:00", "tipo": "mcp", "registro": "M0028", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:50:42.565760+00:00", "tipo": "mcp_inicio", "registro": "M0029", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:50:43.006216+00:00", "tipo": "mcp", "registro": "M0029", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:50:49.150806+00:00", "tipo": "mcp_inicio", "registro": "M0030", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:50:49.684646+00:00", "tipo": "mcp", "registro": "M0030", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:50:49.689150+00:00", "tipo": "saida_sem_json", "tool": "Hunt", "erro": "A resposta final não contém um objeto JSON", "texto": ""}
+{"utc": "2026-10-22T19:51:35.732470+00:00", "tipo": "formatacao", "tool": "Hunt", "retornos": 12}
+{"utc": "2026-10-22T19:51:35.742549+00:00", "tipo": "pistas_descartadas", "tool": "Hunt", "descartes": [{"pista": "P002", "motivos": ["M0028: trecho não consta da fonte"]}, {"pista": "P008", "motivos": ["M0022: trecho não consta da fonte"]}]}
+{"utc": "2026-10-22T19:51:35.744546+00:00", "tipo": "hunt_concluido", "versao": 2}
+{"utc": "2026-10-22T19:52:11.858335+00:00", "tipo": "mcp_inicio", "registro": "M0031", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:52:12.348210+00:00", "tipo": "mcp", "registro": "M0031", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:52:16.776333+00:00", "tipo": "mcp_inicio", "registro": "M0032", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:52:17.256491+00:00", "tipo": "mcp", "registro": "M0032", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:52:21.340158+00:00", "tipo": "mcp_inicio", "registro": "M0033", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:52:21.889142+00:00", "tipo": "mcp", "registro": "M0033", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:52:26.355183+00:00", "tipo": "mcp_inicio", "registro": "M0034", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:52:26.849166+00:00", "tipo": "mcp", "registro": "M0034", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:52:31.615789+00:00", "tipo": "mcp_inicio", "registro": "M0035", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:52:32.151551+00:00", "tipo": "mcp", "registro": "M0035", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:52:36.269240+00:00", "tipo": "mcp_inicio", "registro": "M0036", "tool": "get_smali_of_class"}
+{"utc": "2026-10-22T19:52:37.093812+00:00", "tipo": "mcp", "registro": "M0036", "tool": "get_smali_of_class"}
+{"utc": "2026-10-22T19:52:42.494399+00:00", "tipo": "mcp_inicio", "registro": "M0037", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:52:42.997898+00:00", "tipo": "mcp", "registro": "M0037", "tool": "search_classes_by_keyword"}
+{"utc": "2026-10-22T19:52:48.371449+00:00", "tipo": "mcp_inicio", "registro": "M0038", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:52:48.900585+00:00", "tipo": "mcp", "registro": "M0038", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:52:54.991953+00:00", "tipo": "mcp_inicio", "registro": "M0039", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:52:55.476700+00:00", "tipo": "mcp", "registro": "M0039", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:53:02.411367+00:00", "tipo": "mcp_inicio", "registro": "M0040", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:53:02.914406+00:00", "tipo": "mcp", "registro": "M0040", "tool": "get_fields_of_class"}
+{"utc": "2026-10-22T19:53:10.392321+00:00", "tipo": "mcp_inicio", "registro": "M0041", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:53:10.905119+00:00", "tipo": "mcp", "registro": "M0041", "tool": "get_xrefs_to_field"}
+{"utc": "2026-10-22T19:53:18.017443+00:00", "tipo": "mcp_inicio", "registro": "M0042", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:53:18.573622+00:00", "tipo": "mcp", "registro": "M0042", "tool": "get_class_source"}
+{"utc": "2026-10-22T19:53:18.577642+00:00", "tipo": "saida_sem_json", "tool": "Hunt", "erro": "A resposta final não contém um objeto JSON", "texto": ""}
+{"utc": "2026-10-22T19:54:08.033037+00:00", "tipo": "formatacao", "tool": "Hunt", "retornos": 12}
+{"utc": "2026-10-22T19:54:08.041565+00:00", "tipo": "pistas_descartadas", "tool": "Hunt", "descartes": [{"pista": "P006", "motivos": ["M0031: classe '-' diverge da consultada 'verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean'"]}, {"pista": "P007", "motivos": ["M0041: classe '-' diverge da consultada 'verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean'"]}, {"pista": "P012", "motivos": ["M0041: classe '-' diverge da consultada 'verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean'"]}, {"pista": "P013", "motivos": ["M0036: trecho não consta da fonte"]}]}
+{"utc": "2026-10-22T19:54:08.042559+00:00", "tipo": "hunt_concluido", "versao": 3}
+{"utc": "2026-10-22T19:54:44.257872+00:00", "tipo": "mcp_inicio", "registro": "M0043", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:54:44.686869+00:00", "tipo": "mcp", "registro": "M0043", "tool": "get_method_by_name"}
+{"utc": "2026-10-22T19:54:49.441430+00:00", "tipo": "mcp_inicio", "registro": "M0044", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:54:49.953502+00:00", "tipo": "mcp", "registro": "M0044", "tool": "get_methods_of_class"}
+{"utc": "2026-10-22T19:55:00.052837+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "ValueError: Cite registros de origem existentes, como M0003. Inexistentes: ['{-3,105,2,102,116,114,102,122,-83}']"}
+{"utc": "2026-10-22T19:55:02.110508+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "ValueError: Use passos e entrada_hex ou entrada_bytes"}
+{"utc": "2026-10-22T19:55:03.898019+00:00", "tipo": "transformacao", "registro": "T0007", "origens": ["M0042"]}
+{"utc": "2026-10-22T19:55:09.352473+00:00", "tipo": "transformacao", "registro": "T0008", "origens": ["M0039"]}
+{"utc": "2026-10-22T19:55:13.443521+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:16.638080+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:19.588889+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:22.317606+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:24.654800+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:26.243353+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:27.936932+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:29.627508+00:00", "tipo": "falha", "tool": "reproduzir_transformacao", "erro": "RuntimeError: Limite de 8 receitas"}
+{"utc": "2026-10-22T19:55:29.636325+00:00", "tipo": "saida_sem_json", "tool": "Analista", "erro": "A resposta final não contém um objeto JSON", "texto": ""}
+{"utc": "2026-10-22T19:56:48.661032+00:00", "tipo": "formatacao", "tool": "Analista", "retornos": 14}
+{"utc": "2026-10-22T19:56:48.667052+00:00", "tipo": "itens_descartados", "tool": "Analista", "descartes": [{"achado": "A002", "motivos": ["T0008: trecho não consta da fonte", "M0036: trecho não consta da fonte"]}, {"achado": "A006", "motivos": ["T0008: trecho não consta da fonte"]}, {"ioc": "I002", "motivos": ["T0008: trecho não consta da fonte", "cita achado inexistente ou descartado"]}]}
+{"utc": "2026-10-22T19:56:48.668046+00:00", "tipo": "analise_concluida", "versao": 3}
+{"utc": "2026-10-22T19:58:01.485975+00:00", "tipo": "falha", "tool": "gerar_relatorio", "erro": "ValueError: Relatório omite ou inventa IDs não descartados"}
+{"utc": "2026-10-22T19:59:27.916549+00:00", "tipo": "falha", "tool": "gerar_relatorio", "erro": "ValueError: Relatório omite ou inventa IDs não descartados"}
+{"utc": "2026-10-22T20:00:55.359539+00:00", "tipo": "falha", "tool": "gerar_relatorio", "erro": "ValueError: Relatório omite ou inventa IDs não descartados"}
+{"utc": "2026-10-22T20:02:19.139768+00:00", "tipo": "relatorio_concluido"}
+{"utc": "2026-10-22T20:02:34.129468+00:00", "tipo": "orquestrador_final", "texto": "**Investigação concluída.** O relatório foi registrado pelo relator.\n\n**Síntese:** A amostra (SHA-256 `ec033c13...e52b8`, pacote `verifier.harmonizer.provider`) apresenta conjunto de módulos consistente com RAT bancário Android: serviço de acessibilidade com overlay/screenshot/gestos e exfiltração (I004), envio silencioso de SMS via scheme `smsto` (I003), dump de contatos/SMS (A003), canal de configuração remota Base64 (A004/A005), download de payload disfarçado de \"atualização\" e autodestruição via `pm clear` confirmada por decodificação XOR (I001/A008). Ofuscação em camadas: XOR com chave repetida + Base64 + nomes aleatórios. Indício de operação dirigida a pt-BR: `_Login_title_` decodifica \"Serviço de Acessibilidade\" (I006).\n\n**Limites principais registrados:** análise estática (presença ≠ execução); manifesto indisponível (M0002 — entry points/permissões não confirmados); nenhum IOC de rede literal extraído (URL provavelmente XOR-ofuscada); gatilhos do Response e da autodestruição não determinados; parte das fontes truncada.\n\n**Próximos passos sugeridos no relatório:** extrair o manifesto fora do JADX, reimplementar o decodificador XOR localmente (URL de 21 bytes e listas-alvo), completar r0, mapear a origem da config C2 e validar os módulos em sandbox dinâmico.\n\nO programa exportará o relatório do relator e os registros de consulta."}
+{"utc": "2026-10-22T20:02:34.139522+00:00", "tipo": "encerramento", "delegacoes": 6, "chamadas_mcp": 44, "receitas": 8}

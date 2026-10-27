@@ -1,0 +1,1 @@
+"pm clear " + packageName. Now decode the other strings.

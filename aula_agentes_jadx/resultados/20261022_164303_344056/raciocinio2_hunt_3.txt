@@ -1,0 +1,1 @@
+Great finding: target packages come from config string (Base64, from lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv). Let's get that field value.

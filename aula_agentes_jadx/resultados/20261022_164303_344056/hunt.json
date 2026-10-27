@@ -1,0 +1,547 @@
+[
+  {
+    "pistas": [
+      {
+        "id": "P001",
+        "categoria": "comportamento_sms",
+        "descricao": "Serviço 'verifier.harmonizer.provider.Response' extrai número e mensagem de um Intent e envia SMS silenciosamente via SmsManager.getDefault().sendTextMessage, com destino e corpo obtidos de extras/URI. Presença no código não comprova execução.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "a",
+            "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"
+          },
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "onStartCommand",
+            "trecho": "a(intent); stopSelf(i2); return 2;"
+          }
+        ]
+      },
+      {
+        "id": "P002",
+        "categoria": "ofuscacao",
+        "descricao": "Strings sensíveis (esquema, nome do extra, partes da mensagem) são montadas em tempo de execução por rotina de decodificação ac0.a(byte[], byte[]) sobre arrays de bytes, ocultando conteúdo estático no DEX.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "a",
+            "trecho": "Uri data = intent.getData(); String schemeSpecificPart = (data == null || !ac0.a(new byte[]{80, -115, -75, -17, 25}, new byte[]{35, -32, -58, -101, 118, 98, 2, 2}).equals(data.getScheme())) ? null : data.getSchemeSpecificPart();"
+          },
+          {
+            "registro_fonte": "M0010",
+            "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0",
+            "metodo": "a",
+            "trecho": "public static String a(byte[] bArr, byte[] bArr2) { return f11a.a(bArr, bArr2); }"
+          }
+        ]
+      },
+      {
+        "id": "P005",
+        "categoria": "comportamento_sms",
+        "descricao": "Busca por 'SmsManager' no código retorna exatamente duas classes: verifier.harmonizer.provider.Response e verifier.harmonizer.provider.r0; r0 ainda não examinada, possível segundo uso da API de SMS.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0005",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "items: [\"verifier.harmonizer.provider.Response\", \"verifier.harmonizer.provider.r0\"]"
+          }
+        ]
+      }
+    ],
+    "cobertura": [
+      {
+        "area": "arvore_de_pacotes",
+        "estado": "parcial",
+        "justificativa": "M0001 retornou 699 pacotes/3574 classes, mas truncado; visão parcial com foco nos pacotes não-biblioteca."
+      },
+      {
+        "area": "manifest_e_entry_points",
+        "estado": "nao_examinada",
+        "justificativa": "AndroidManifest.xml indisponível (M0002, erro 404); busca por MainActivity sem resultados (M0004)."
+      },
+      {
+        "area": "servico_sms_Response",
+        "estado": "examinada",
+        "justificativa": "Código-fonte completo obtido em M0006; rotina de decodificação ac0.a vista em M0009/M0010."
+      },
+      {
+        "area": "servico_acessibilidade_kltwlkizuxhgjrcyfiarqyuwjuvz",
+        "estado": "parcial",
+        "justificativa": "M0012 retornou apenas imports (truncado); lógica interna dos métodos não examinada."
+      },
+      {
+        "area": "ofuscacao",
+        "estado": "examinada",
+        "justificativa": "Sinais confirmados: pacote profundo, strings decodificadas de arrays de bytes, nomes de classes aleatórios."
+      },
+      {
+        "area": "carregamento_dinamico_e_reflexao",
+        "estado": "nao_examinada",
+        "justificativa": "Busca por DexClassLoader não retornou itens (M0008); demais vetores (reflexão, loadLibrary) não pesquisados."
+      }
+    ],
+    "limites": [
+      "O ambiente não permitiu obter AndroidManifest.xml (M0002), então entry points e permissões declaradas não foram confirmados.",
+      "O retorno M0001 está truncado; parte da árvore de pacotes não foi visualizada.",
+      "O retorno M0012 está truncado e contém apenas imports; o comportamento interno do serviço de acessibilidade não foi verificado.",
+      "Nenhuma consulta reproduziu a decodificação das strings ofuscadas; os conteúdos reais dos bytes permanecem desconhecidos.",
+      "Presença no código não comprova execução, atividade de rede nem autoria.",
+      "A classe verifier.harmonizer.provider.r0 (uso adicional de SmsManager) não foi examinada."
+    ]
+  },
+  {
+    "pistas": [
+      {
+        "id": "P001",
+        "categoria": "comportamento_sms",
+        "descricao": "Serviço 'verifier.harmonizer.provider.Response' extrai número e mensagem de um Intent e envia SMS silenciosamente via SmsManager.getDefault().sendTextMessage. Presença no código não comprova execução.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "a",
+            "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"
+          },
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "onStartCommand",
+            "trecho": "a(intent); stopSelf(i2); return 2;"
+          }
+        ]
+      },
+      {
+        "id": "P005",
+        "categoria": "comportamento_sms",
+        "descricao": "Busca por 'SmsManager' aponta duas classes: Response e r0. r0 (M0029) confirma imports de SmsManager, SubscriptionManager e ContactsContract e query ao ContentResolver em método estático a(Context, String) — possível dump de contatos/SMS; corpo do método truncado.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0005",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "items: [\"verifier.harmonizer.provider.Response\", \"verifier.harmonizer.provider.r0\"]"
+          },
+          {
+            "registro_fonte": "M0029",
+            "classe": "verifier.harmonizer.provider.r0",
+            "metodo": "a",
+            "trecho": "import android.telephony.SmsManager;"
+          },
+          {
+            "registro_fonte": "M0029",
+            "classe": "verifier.harmonizer.provider.r0",
+            "metodo": "a",
+            "trecho": "Query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new"
+          }
+        ]
+      },
+      {
+        "id": "P006",
+        "categoria": "comando_e_controle_config",
+        "descricao": "Serviço zfyxetnpqczwwesatwnjdr.onStartCommand lê configuração remota (lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv), decodifica entradas Base64 divididas por separador, preenche o conjunto-alvo kltwlkizuxhgjrcyfiarqyuwjuvz.x (pacotes alvo do overlay) e configura módulos via s.H/E/F/G; se a config começa com valor decodificado de 'empty|' ou igual ao primeiro decoded, desativa (wy.f(..., false)). Também inicia serviço foreground kiezkyvaplpxfgcszohglq.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0024",
+            "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+            "metodo": "onStartCommand",
+            "trecho": "if (!lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv.contains(ac0.a(new byte[]{64}, new byte[]{60, -62, 14, 96, -109, -109, -73, -65})) || lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv.startsWith(ac0.a(new byte[]{-48, -80, -115, -76, -102, -36}, new byte[]{-75, -35, -3, -64, -29, -96, 103, 8}))) {"
+          },
+          {
+            "registro_fonte": "M0024",
+            "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+            "metodo": "onStartCommand",
+            "trecho": "String str2 = new String(Base64.decode(str, 0), ac0.a(new byte[]{-11, -119, 100, -61, -97}, new byte[]{-96, -35, 34, -18, -89, -90, -7, 46}));"
+          },
+          {
+            "registro_fonte": "M0024",
+            "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+            "metodo": "onStartCommand",
+            "trecho": "kltwlkizuxhgjrcyfiarqyuwjuvz.x.add(str5.toLowerCase());"
+          },
+          {
+            "registro_fonte": "M0024",
+            "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+            "metodo": "onStartCommand",
+            "trecho": "startForegroundService(intent2);"
+          }
+        ]
+      },
+      {
+        "id": "P007",
+        "categoria": "infraestrutura_aplicacao",
+        "descricao": "Classe de configuração lqkgduyoofpqpmpsqmcean centraliza parâmetros do malware: campos com nomes indicativos (_Login_title_, _Login_btn_, Anti_Delete, ALL_CONFIG, Prevent_sleep, SetDef_SMS, SetDef_Call, extjs, PPKG, subdir) e o valor inicial ipqzpdjermcdvtbjxigpvizdmyv = \"empty|\". Campos Base64 incluem _Login_title_ = 'U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=' (Base64 de texto em português sobre acessibilidade).",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0025",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<fields>",
+            "trecho": "AccessInfo: FIELD 0x9 (public static ) java.lang.String Anti_Delete"
+          },
+          {
+            "registro_fonte": "M0025",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<fields>",
+            "trecho": "AccessInfo: FIELD 0x9 (public static ) java.lang.String SetDef_SMS"
+          },
+          {
+            "registro_fonte": "M0028",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<clinit>",
+            "trecho": "public static String ipqzpdjermcdvtbjxigpvizdmyv = \"empty|\";"
+          },
+          {
+            "registro_fonte": "M0028",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<clinit>",
+            "trecho": "public static String _Login_title_ = \"U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=\";"
+          }
+        ]
+      },
+      {
+        "id": "P009",
+        "categoria": "rede_e_exfiltracao",
+        "descricao": "Busca por 'http' no pacote da aplicação retorna DownloadForegroundService, d0 e o0; busca por 'https://' não retorna resultados — URLs podem estar ofuscadas ou montadas em runtime. Classe d0 (truncada em M0020) importa módulos de rede/utilitários (qe, wy, ce) e APIs de mídia/tela (Bitmap, MediaMetadataRetriever, AudioManager, Settings, Base64), consistente com canal de exfiltração/controle referenciado pelo serviço de acessibilidade.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0019",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "items: [\"verifier.harmonizer.provider.DownloadForegroundService\", \"verifier.harmonizer.provider.d0\", \"verifier.harmonizer.provider.o0\"]"
+          },
+          {
+            "registro_fonte": "M0021",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "type: class-list\nitems: []"
+          },
+          {
+            "registro_fonte": "M0020",
+            "classe": "verifier.harmonizer.provider.d0",
+            "metodo": "<imports>",
+            "trecho": "import android.media.MediaMetadataRetriever;"
+          }
+        ]
+      },
+      {
+        "id": "P010",
+        "categoria": "ofuscacao",
+        "descricao": "Nomes artificialmente aleatórios e pacote de decodificação profundo (a.b.c...bababa) com classes de 2-3 caracteres (ac0, bc0, ce, wy, qe): ofuscação estrutural sistemática em toda a base da aplicação.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0020",
+            "classe": "verifier.harmonizer.provider.d0",
+            "metodo": "<imports>",
+            "trecho": "import a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0;"
+          },
+          {
+            "registro_fonte": "M0028",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<clinit>",
+            "trecho": "public static String rddzaiebmeaottxhlopuliu = get_dropname();"
+          }
+        ]
+      }
+    ],
+    "cobertura": [
+      {
+        "area": "arvore_de_pacotes",
+        "estado": "parcial",
+        "justificativa": "M0001 retornou 699 pacotes/3574 classes, truncado; visão parcial com foco nos pacotes da aplicação."
+      },
+      {
+        "area": "manifest_e_entry_points",
+        "estado": "nao_examinada",
+        "justificativa": "AndroidManifest.xml indisponível (M0002, erro 404); busca por MainActivity sem resultados (M0004)."
+      },
+      {
+        "area": "servico_sms_Response",
+        "estado": "examinada",
+        "justificativa": "Código-fonte completo em M0006; fluxo onStartCommand → a() → SmsManager → stopSelf reconstruído."
+      },
+      {
+        "area": "configuracao_remota_e_C2",
+        "estado": "parcial",
+        "justificativa": "M0024/M0028/M0025 mostram parsing de config Base64 e campos de controle; fonte de onde ALL_CONFIG/ipqzpdjermcdvtbjxigpvizdmyv são atualizados (zc.a(), rede) não totalmente seguida."
+      },
+      {
+        "area": "servico_acessibilidade_kltwlkizuxhgjrcyfiarqyuwjuvz",
+        "estado": "parcial",
+        "justificativa": "Campos e xrefs confirmados (M0022/M0023); código completo dos métodos centrais ainda truncado em retornos anteriores (M0012/M0017)."
+      },
+      {
+        "area": "classe_r0_dump_sms_contatos",
+        "estado": "parcial",
+        "justificativa": "M0029 confirma imports e query a ContactsContract, mas método truncado; uso de SmsManager em r0 não integralmente visível."
+      },
+      {
+        "area": "ofuscacao",
+        "estado": "examinada",
+        "justificativa": "Sinais confirmados: pacote profundo, strings decodificadas de bytes/XOR e Unicode (o0.h), Base64 em config, nomes aleatórios."
+      },
+      {
+        "area": "rede_e_exfiltracao",
+        "estado": "parcial",
+        "justificativa": "M0019 lista candidatos (d0, o0, DownloadForegroundService); M0021 sem 'https://'; URLs/domínios reais não extraídos."
+      },
+      {
+        "area": "carregamento_dinamico_e_reflexao",
+        "estado": "nao_examinada",
+        "justificativa": "M0008 sem itens para DexClassLoader; reflexão/loadLibrary não pesquisados."
+      }
+    ],
+    "limites": [
+      "AndroidManifest.xml indisponível (M0002 erro 404): entry points, permissões e intents-filters não confirmados.",
+      "M0020 (d0) e M0029 (r0) retornaram truncados; partes relevantes não examinadas.",
+      "Nenhum retorno reproduziu a decodificação das strings ofuscadas (ac0.a, o0.h, Base64 de config); conteúdos reais permanecem desconhecidos, exceto os já registrados em análises anteriores.",
+      "Busca por 'https://' (M0021) e por 'BOOT_COMPLETED' (M0030) não retornou resultados: ausência de string literal não descarta comunicação C2 nem persistência por receiver.",
+      "Consulta M0026 falhou (campo tratado como método); configuração ipqzpdjermcdvtbjxigpvizdmyv é campo estático, não método.",
+      "Presença no código não comprova execução, atividade de rede nem autoria; análise puramente estática."
+    ]
+  },
+  {
+    "pistas": [
+      {
+        "id": "P001",
+        "categoria": "comportamento_sms",
+        "descricao": "Serviço 'verifier.harmonizer.provider.Response' extrai número e mensagem de um Intent e envia SMS silenciosamente via SmsManager.getDefault().sendTextMessage. Presença no código não comprova execução.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "a",
+            "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"
+          },
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "onStartCommand",
+            "trecho": "a(intent); stopSelf(i2); return 2;"
+          }
+        ]
+      },
+      {
+        "id": "P002",
+        "categoria": "ofuscacao",
+        "descricao": "Strings sensíveis (esquema, nome do extra, partes da mensagem, nomes de canais de notificação) são montadas em tempo de execução por rotina de decodificação ac0.a(byte[], byte[]) sobre arrays de bytes, ocultando conteúdo estático no DEX. Padrão confirmado também em DownloadForegroundService e cafaiezlhmdcjcdp.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0006",
+            "classe": "verifier.harmonizer.provider.Response",
+            "metodo": "a",
+            "trecho": "Uri data = intent.getData(); String schemeSpecificPart = (data == null || !ac0.a(new byte[]{80, -115, -75, -17, 25}, new byte[]{35, -32, -58, -101, 118, 98, 2, 2}).equals(data.getScheme())) ? null : data.getSchemeSpecificPart();"
+          },
+          {
+            "registro_fonte": "M0010",
+            "classe": "a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0",
+            "metodo": "a",
+            "trecho": "public static String a(byte[] bArr, byte[] bArr2) { return f11a.a(bArr, bArr2); }"
+          },
+          {
+            "registro_fonte": "M0039",
+            "classe": "verifier.harmonizer.provider.DownloadForegroundService",
+            "metodo": "<clinit>",
+            "trecho": "public static String b = ac0.a(new byte[]{94, -22, 53, -123, -74, -98, 122, 73, 106, -81, 50, -104, -89, -42, 102, 87, 105, -18, 32, -110, -90}, new byte[]{13, -113, 84, -9, -43, -10, 19, 39});"
+          },
+          {
+            "registro_fonte": "M0036",
+            "classe": "verifier.harmonizer.provider.kiezkyvaplpxfgcszohglq.d",
+            "metodo": "<clinit>",
+            "trecho": "invoke-static {v0, v2}, La/b/c/d/e/f/g/h/i/j/k/l/m/o/p/aa/aaa/aaaa/aaab/aabb/aabbaa/ababaa/bababa/ac0;->a([B[B)Ljava/lang/String;"
+          }
+        ]
+      },
+      {
+        "id": "P005",
+        "categoria": "comportamento_sms",
+        "descricao": "Busca por 'SmsManager' aponta duas classes: Response e r0. r0 (M0029) confirma imports de SmsManager, SubscriptionManager e ContactsContract e query ao ContentResolver em método estático a(Context, String) — possível dump de contatos/SMS; corpo do método truncado.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0005",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "items: [\"verifier.harmonizer.provider.Response\", \"verifier.harmonizer.provider.r0\"]"
+          },
+          {
+            "registro_fonte": "M0029",
+            "classe": "verifier.harmonizer.provider.r0",
+            "metodo": "a",
+            "trecho": "import android.telephony.SmsManager;"
+          },
+          {
+            "registro_fonte": "M0029",
+            "classe": "verifier.harmonizer.provider.r0",
+            "metodo": "a",
+            "trecho": "Query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new"
+          }
+        ]
+      },
+      {
+        "id": "P009",
+        "categoria": "rede_e_exfiltracao",
+        "descricao": "Buscas por 'http'/'openConnection' no pacote da aplicação apontam DownloadForegroundService, d0 e o0; busca por 'https://' não retorna resultados — URLs possivelmente ofuscadas ou montadas em runtime. DownloadForegroundService confirma import de java.net.HttpURLConnection e java.net.URL, consistente com download de payload via serviço foreground com notificação de progresso.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0037",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "items: [\"verifier.harmonizer.provider.DownloadForegroundService\", \"verifier.harmonizer.provider.d0\", \"verifier.harmonizer.provider.o0\"]"
+          },
+          {
+            "registro_fonte": "M0039",
+            "classe": "verifier.harmonizer.provider.DownloadForegroundService",
+            "metodo": "<imports>",
+            "trecho": "import java.net.HttpURLConnection;"
+          },
+          {
+            "registro_fonte": "M0039",
+            "classe": "verifier.harmonizer.provider.DownloadForegroundService",
+            "metodo": "<imports>",
+            "trecho": "import java.net.URL;"
+          },
+          {
+            "registro_fonte": "M0021",
+            "classe": "-",
+            "metodo": "-",
+            "trecho": "type: class-list\nitems: []"
+          }
+        ]
+      },
+      {
+        "id": "P010",
+        "categoria": "ofuscacao",
+        "descricao": "Nomes artificialmente aleatórios e pacote de decodificação profundo (a.b.c.d...bababa) com classes de 2-3 caracteres (ac0, bc0, ce, wy, qe): ofuscação estrutural sistemática em toda a base da aplicação, incluindo o AsyncTask kiezkyvaplpxfgcszohglq$d cujas constantes de string são decodificadas de arrays de bytes no <clinit>.",
+        "prioridade": "media",
+        "evidencias": [
+          {
+            "registro_fonte": "M0038",
+            "classe": "verifier.harmonizer.provider.o0",
+            "metodo": "<imports>",
+            "trecho": "import a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0;"
+          },
+          {
+            "registro_fonte": "M0028",
+            "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+            "metodo": "<clinit>",
+            "trecho": "public static String rddzaiebmeaottxhlopuliu = get_dropname();"
+          },
+          {
+            "registro_fonte": "M0036",
+            "classe": "verifier.harmonizer.provider.kiezkyvaplpxfgcszohglq.d",
+            "metodo": "<clinit>",
+            "trecho": ".class public Lverifier/harmonizer/provider/kiezkyvaplpxfgcszohglq$d;\n.super Landroid/os/AsyncTask;"
+          }
+        ]
+      },
+      {
+        "id": "P011",
+        "categoria": "anti_analise_autodestruicao",
+        "descricao": "Activity cafaiezlhmdcjcdp executa rotina de autodestruição: executa comando shell decodificado concatenado com o nome do pacote (provável uninstall/clear), apaga recursivamente cache, arquivos internos/externos e bancos de dados, e chama System.exit(1). Também controla flags do serviço de acessibilidade (kltwlkizuxhgjrcyfiarqyuwjuvz.b0/G). Conteúdo exato do comando permanece não decodificado nesta sessão.",
+        "prioridade": "alta",
+        "evidencias": [
+          {
+            "registro_fonte": "M0042",
+            "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+            "metodo": "e",
+            "trecho": "Runtime.getRuntime().exec(ac0.a(new byte[]{-3, 105, 2, 102, 116, 114, 102, 122, -83}, new byte[]{-115, 4, 34, 5, 24, 23, 7, 8}) + getApplicationContext().getPackageName());"
+          },
+          {
+            "registro_fonte": "M0042",
+            "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+            "metodo": "e",
+            "trecho": "c(applicationContext.getFilesDir());"
+          },
+          {
+            "registro_fonte": "M0042",
+            "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+            "metodo": "e",
+            "trecho": "System.exit(1);"
+          },
+          {
+            "registro_fonte": "M0042",
+            "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+            "metodo": "b",
+            "trecho": "kltwlkizuxhgjrcyfiarqyuwjuvz.b0 = z;"
+          }
+        ]
+      }
+    ],
+    "cobertura": [
+      {
+        "area": "arvore_de_pacotes",
+        "estado": "parcial",
+        "justificativa": "M0001 retornou 699 pacotes/3574 classes, truncado; foco mantido nos pacotes da aplicação (verifier.harmonizer.provider e pacote profundo de decodificação)."
+      },
+      {
+        "area": "manifest_e_entry_points",
+        "estado": "nao_examinada",
+        "justificativa": "AndroidManifest.xml indisponível (M0002, erro 404); entry points, permissões e intents-filters não confirmados."
+      },
+      {
+        "area": "servico_sms_Response",
+        "estado": "examinada",
+        "justificativa": "Código-fonte completo em M0006; fluxo onStartCommand → a() → SmsManager → stopSelf reconstruído."
+      },
+      {
+        "area": "configuracao_remota_e_C2",
+        "estado": "parcial",
+        "justificativa": "M0024/M0028/M0040/M0041 mostram parsing de config Base64, campos de controle e múltiplos consumidores de ALL_CONFIG/ipqzpdjermcdvtbjxigpvizdmyv (M0031/M0041); fonte de atualização (rede) não totalmente seguida."
+      },
+      {
+        "area": "servico_acessibilidade_kltwlkizuxhgjrcyfiarqyuwjuvz",
+        "estado": "parcial",
+        "justificativa": "Capacidades gerais confirmadas em rodada anterior (overlay, screenshot, gestos); retorno truncado (M0017) impediu leitura completa dos métodos centrais; xref a ALL_CONFIG.v confirmado em M0041."
+      },
+      {
+        "area": "classe_r0_dump_sms_contatos",
+        "estado": "parcial",
+        "justificativa": "M0029 confirma imports e query a ContactsContract, mas método truncado; uso integral de SmsManager em r0 não visível."
+      },
+      {
+        "area": "ofuscacao",
+        "estado": "examinada",
+        "justificativa": "Sinais confirmados em múltiplos retornos: pacote profundo (M0038/M0039), strings decodificadas de bytes/XOR em Response, DownloadForegroundService, cafaiezlhmdcjcdp e no smali de kiezkyvaplpxfgcszohglq$d (M0036), Base64 em config, nomes aleatórios."
+      },
+      {
+        "area": "rede_e_exfiltracao",
+        "estado": "parcial",
+        "justificativa": "M0037 lista d0/o0/DownloadForegroundService; M0039 confirma HttpURLConnection/URL/FileOutputStream; URLs/domínios reais ainda não extraídos (strings decodificadas não reproduzidas)."
+      },
+      {
+        "area": "download_e_auto_remocao",
+        "estado": "parcial",
+        "justificativa": "M0039 (DownloadForegroundService) e M0042 (cafaiezlhmdcjcdp: exec de comando decodificado, deleção de arquivos/bancos, System.exit) examinados parcialmente; retornos truncados (M0039/M0042) e strings não decodificadas."
+      },
+      {
+        "area": "carregamento_dinamico_e_reflexao",
+        "estado": "nao_examinada",
+        "justificativa": "M0008 sem itens para DexClassLoader; reflexão/loadLibrary não pesquisados."
+      }
+    ],
+    "limites": [
+      "AndroidManifest.xml indisponível (M0002 erro 404): entry points, permissões e intents-filters não confirmados; gatilho do serviço Response permanece inferência.",
+      "M0036 (smali de kiezkyvaplpxfgcszohglq$d), M0038 (o0) e M0039 (DownloadForegroundService) retornaram truncados; partes relevantes não examinadas.",
+      "M0034 (doInBackground) retornou apenas declaração sem corpo; M0035 falhou (404 'Requested method l not found') — lógica interna do AsyncTask que consome ALL_CONFIG não lida.",
+      "M0032 (fonte de kiezkyvaplpxfgcszohglq.d) retornou vazio; M0033 (lista de métodos) também truncada ao final.",
+      "Nenhum retorno desta rodada reproduziu a decodificação das strings ofuscadas (incluindo o comando shell em cafaiezlhmdcjcdp.e e a URL em DownloadForegroundService); conteúdos reais permanecem desconhecidos nesta sessão.",
+      "Presença no código não comprova execução, atividade de rede nem autoria; análise puramente estática via JADX, sem execução do APK."
+    ]
+  }
+]

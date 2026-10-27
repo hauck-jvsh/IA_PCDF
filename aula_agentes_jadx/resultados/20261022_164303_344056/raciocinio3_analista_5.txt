@@ -1,0 +1,9 @@
+Need the algorithm. Prior analysis says XOR with repeating key (bc0.b). Validate with known: {80,-115,-75,-17,25} XOR key {35,-32,-58,-101,118,98,2,2} → 'smsto'. Check: 80^35=115='s'; -115 as byte = 0x8D (141); 141^(-32 as byte 0xE0=224)=101='e'; -75=0xB5(181)^(-58 as 0xC6=198)=115='s'; -17=0xEF(239)^(-101 as 0x9B=155)=116='t'; 25^(118)=111='o'. Yes! XOR byte-wise with repeating key, using two's complement bytes. So try reproduzir_transformacao with xor key. But the tool takes chave_hex or chave_bytes. Convert key arrays to signed byte arrays.
+
+Compute:
+1. shell cmd: data {-3,105,2,102,116,114,102,122,-83}, key {-115,4,34,5,24,23,7,8}.
+2. DownloadForegroundService.b: data 21 bytes, key 8 bytes repeated.
+3. config strings.
+4. charset {-11,-119,100,-61,-97}/{...}.
+
+Let me just call reproduzir_transformacao with xor chave_bytes as signed arrays. Try each step separately or one recipe with multiple steps? Recipe steps apply sequentially to input; better to do separate calls. I'll do the two most important first.

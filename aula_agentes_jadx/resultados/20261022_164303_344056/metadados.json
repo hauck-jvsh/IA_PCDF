@@ -1,0 +1,8 @@
+{
+  "amostra_sha256_informado": "ec033c13f06bcccb3d35b46c56003a60516339419ccc75a3738bbcf7f83e52b8",
+  "modelo": "glm-5.3-flash",
+  "api": "chat_completions",
+  "missao": "Analise o malware Android aberto no JADX. Explique seu funcionamento em alto nível, investigue elementos ofuscados ou potencialmente maliciosos e extraia IOCs sustentados por evidências. Produza um relatório rastreável, distinguindo observação estática, hipótese e limite.",
+  "limite_mcp": 60,
+  "limite_receitas": 8
+}

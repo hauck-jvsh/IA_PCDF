@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "orquestrador",
+  "mcp": {
+    "jadx": {
+      "type": "remote",
+      "url": "http://127.0.0.1:8651/mcp",
+      "enabled": true,
+      "oauth": false
+    }
+  },
+  "provider": {
+  "LOCAL_PF": {
+    "npm": "@ai-sdk/openai-compatible",
+    "options": {
+      "baseURL": "http://10.61.86.107:8080/v1",
+      "apiKey": "sk-6fd2886003e4db237873d34e8b466f35c67343ca1fdffebe"
+    },
+    "models": { "glm-5.3-flash": {} }
+   }
+  },
+  "permission": {
+    "*": "deny"
+  }
+
+}

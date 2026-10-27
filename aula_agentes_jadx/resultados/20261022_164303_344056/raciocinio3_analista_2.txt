@@ -1,0 +1,13 @@
+It's XOR with repeating key. Decode arrays.
+
+Scheme: key {35,-32,-58,-101,118,98,2,2}, data {80,-115,-75,-17,25}:
+80^35=115 's'; -115(-115 as byte = 0x8D)^ -32(0xE0)=0x8D^0xE0=0x6D 'm'; -75(0xB5)^-58(0xC6)=0x73 's'; -17(0xEF)^-101(0x9B)=0x74 't'. So "smst" — likely scheme "smst"? Only 4 bytes decoded. Hmm, scheme "smst"? Maybe full scheme elsewhere. OK.
+
+Extra name: key {-27,68,126,88,55,31,-55,-122}, data 25 bytes {-124,42,26,42,88,118,-83,-88,-116,42,10,61,89,107,-25,-29,-99,48,12,57,25,75,-116,-34,-79}:
+-124^ -27: 0x84^0xE5=0x61 'a'; 42^68=0x74 't'; 26^126=0x64... wait 26=0x1A ^0x7E=0x64 'd'? Hmm 0x1A^0x7E=0x64 'd'. "atd"? next 42^88=0x62 'b'? 42=0x2A^0x58=0x72 'r'. 88^55=0x27 ''? 88=0x58^0x37=0x6F 'o'. 118^31=0x6F 'o'. So "atbroo..."? Hmm 42^88: 0x2A^0x58=0x72 'r'. 118=0x76^0x1F=0x69 'i'. -83=0xAD^0xC9=0x64 'd'? 0xAD^0xC9=0x64 'd'. "atbroid"? Wait: 'a','t','b','r','o','i','d'... "android"? Let me redo 3rd: 26^126=0x1A^0x7E=0x64 'd'... but that gives "atdroid"? Hmm second char: 42^68=0x2A^0x44=0x6E 'n'! Yes 0x2A^0x44=0x6E. So "android". 4th: 42^88=0x72 'r'. 5th: 88^55=0x6F 'o'. 6th: 118^31=0x69 'i'. 7th: -83(0xAD)^-55(0xC9)=0x64 'd'. 8th: -88(0xA8)^-122(0x86)=0x2E '.'. 9th: -116(0x8C)^-27(0xE5)=0x69 'i'. 10th: 42^68=0x6E 'n'. 11th: 10^126=0x74 't'. 12th: 61^88=0x65 'e'. 13th: 89^55=0x6E 'n'. 14th: 107^31=0x74 't'. 15th: -25(0xE7)^-55(0xC9)=0x2E '.'. 16th: -29(0xE3)^-122(0x86)=0x65 'e'. 17th: -99(0x9D)^-27(0xE5)=0x78 'x'. 18th: 48^68=0x74 't'. 19th: 12^126=0x74 't'. 20th: 57^88=0x61 'a'. 21st: 25^55=0x2C ','. 22nd: 75^31=0x74 't'. 23rd: -116(0x8C)^-55(0xC9)=0x45 'E'. 24th: -34(0xDE)^-122(0x86)=0x58 'X'. 25th: -79(0xB1)^-27(0xE5)=0x54 'T'. → "android.intent.extra.TEXT" ✓
+
+Key rotation: key length 8, i2 continues (doesn't reset per call — actually resets when i2>=length2, continues from where left). Fine.
+
+f1130a: key {-99,22,-67,-74,-60,-71,69,63}, data 15 bytes {-49,115,-50,-58,-85,-41,54,90,-50,115,-49,-64,-83,-38,32}: -49(0xCF)^-99(0x9D)=0x52 'R'; 115^22=0x65 'e'; -50(0xCE)^-67(0xBD)=0x73 's'; -58(0xC6)^-74(0xB6)=0x70 'p'; -85(0xAB)^-60(0xC4)=0x6F 'o'; -41(0xD7)^-71(0xB9)=0x6E 'n'; 54^69=0x73 's'; 90^63=0x65 'e'. → "Response" (class name, unused-ish? maybe service name).
+
+Message prefix: data 25 bytes, key {-118,-116,90,10,-66,4,-35,98}: -40(0xD8)^-118(0x8A)=0x52 'R'? 0xD8^0x8A=0x52 'R'. -55(0xC9)^-116(0x8C)=0x45 'E'? 0xC9^0x8C=0x45. Hmm 'RE'? Wait maybe lowercase: 0xD8^0x8A: 0xD8=11011000, 0x8A=10001010 → 01010010=0x52 'R'. Next 9^90=0x5B '['? Hmm. Maybe I should use the tool to verify. Yes, use reproduzir_transformacao with xor.

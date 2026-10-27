@@ -1,0 +1,1 @@
+Huge obfuscated package "a.b.c.d...bababa" (1633 classes) and app package verifier.harmonizer.provider with random-named subpackages. Need manifest. Use get_all_resource_file_names / AndroidManifest.xml.

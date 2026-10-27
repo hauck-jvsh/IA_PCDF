@@ -1,0 +1,5 @@
+logs_transformacoes.jsonl
+sessao*.json
+relatorio*.md
+iocs*.csv
+.env

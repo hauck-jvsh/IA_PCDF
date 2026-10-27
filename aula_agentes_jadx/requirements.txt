@@ -1,0 +1,7 @@
+openai-agents==0.24.0
+openai==3.35.1
+mcp==1.28.1
+httpx==0.28.1
+pydantic==2.14.1
+cryptography==50.0.2
+json-repair==0.64.1

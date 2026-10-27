@@ -1,0 +1,1 @@
+Build the JSON report with all sections. Index all IDs: M0001–M0044, P001, P002, P005–P011, A001, A003–A005, A007, A008, T0001–T0008, I001, I003–I007. Include statuses.

