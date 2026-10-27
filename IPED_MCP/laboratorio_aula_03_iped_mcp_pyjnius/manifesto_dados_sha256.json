@@ -1,0 +1,62 @@
+{
+  "01_reuniao.txt": {
+    "bytes": 187,
+    "sha256": "6606ec8aee85330f128a264bf1e96b40e985cbe4870bdcaac71e8d72d50aaaee"
+  },
+  "02_transferencia.txt": {
+    "bytes": 204,
+    "sha256": "bdc381aa80ac4b6d8cc70f651f568fbcb0c17efdba3044f46677b04586ea7fc4"
+  },
+  "03_cancelamento.txt": {
+    "bytes": 207,
+    "sha256": "e3fcb06968637adf141be736341127e89f5554d4eebe7dd133345c4cc772ab46"
+  },
+  "04_ruido.txt": {
+    "bytes": 251,
+    "sha256": "68ecc3baa2ef74124859c864db5eb24d5444a342a85f03c131d5a3935decb9e3"
+  },
+  "05_instrucao_no_documento.txt": {
+    "bytes": 245,
+    "sha256": "92bba5af10a74510a6cad91c1f10899ccdb14fe0de5d607fb5cb6a78ef58f4d9"
+  },
+  "06_aviso.txt": {
+    "bytes": 230,
+    "sha256": "f80065b468a44f5efe95c369464d319e7c06770ddf391febd4cbb32a16cef55b"
+  },
+  "formatos/depoimento.docx": {
+    "bytes": 36612,
+    "sha256": "21931801aeda7fae70cc75a20deda9c812f550d5ec0787d8aa28dc8c7627b253"
+  },
+  "formatos/desconhecido.bin": {
+    "bytes": 24,
+    "sha256": "880dad7bdd09436fa70e32e55a6f4e3d57bc8493cc46b0d5a1db236827541b96"
+  },
+  "formatos/imagem.png": {
+    "bytes": 7670,
+    "sha256": "b6b1c770a95507e20ae70f4f1495c56fa85f57d11bd1984bb551eaba21b5cbf8"
+  },
+  "formatos/mensagem.eml": {
+    "bytes": 199,
+    "sha256": "c3fac8f06da798039a566f5b07ef050e8495018fe4a08820500059234d2f793b"
+  },
+  "formatos/pagina.html": {
+    "bytes": 175,
+    "sha256": "1ad96f8fb60dde9e4dae8eabfbe1b0898547d3fbc08f8cec05496559d49b5d47"
+  },
+  "formatos/planilha.csv": {
+    "bytes": 56,
+    "sha256": "0209f07dfcb0b88c749a1112b7dd54d7db90f6e5e3a894b4d995efb244fa0790"
+  },
+  "formatos/registro.json": {
+    "bytes": 57,
+    "sha256": "ea2a338db4587d8debe4f8d20fcd88501982ccf2f7aa03e45c71602303485b68"
+  },
+  "formatos/relatorio.pdf": {
+    "bytes": 1383,
+    "sha256": "b3795fae68338894c067e1999a2551f36040918be23d3a506c1d69e3b5309e6a"
+  },
+  "formatos/unicode_longo.txt": {
+    "bytes": 224047,
+    "sha256": "94528dde55ce68588c2472e502c6bff7b5e47b242d839717024c62774bd71060"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "iped": {
+      "type": "local",
+      "command": [
+        "C:\\lab_iped\\mcp\\.venv\\Scripts\\python.exe",
+        "C:\\lab_iped\\mcp\\servidor_mcp.py"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    }
+  },
+  "permission": {
+    "*": "deny",
+    "iped_caso_info": "allow",
+    "iped_buscar_itens": "allow",
+    "iped_obter_metadados": "allow",
+    "iped_ler_texto": "allow",
+    "iped_listar_marcadores": "allow",
+    "iped_criar_marcador": "allow",
+    "iped_associar_itens_marcador": "allow"
+  }
+}

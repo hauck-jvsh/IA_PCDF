@@ -1,0 +1,4 @@
+CASO SINTÉTICO PARA AULA
+Este conjunto usa pessoas, valores e eventos fictícios.
+Nenhum item representa evidência operacional ou informação pessoal real.
+Os IDs dos itens serão atribuídos pelo IPED durante o processamento.
