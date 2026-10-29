@@ -11,6 +11,9 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from openai import AsyncOpenAI
 
+import dotenv
+dotenv.load_dotenv()
+
 BASE_URL = os.getenv("OPENAI_BASE_URL", "http://127.0.0.1:9931/v1")
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 MAX_RODADAS = 20

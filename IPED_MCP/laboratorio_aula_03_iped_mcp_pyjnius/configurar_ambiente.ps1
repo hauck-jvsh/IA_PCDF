@@ -1,6 +1,6 @@
 param(
     [string]$IpedDir = 'D:\IPED-4.3.1_and_java_plugins\iped-4.3.1',
-    [string]$Caso = 'D:\iped_mcp\caso_sintetico',
+    [string]$Caso = 'D:\iped_mcp\IA_PCDF\IPED_MCP\laboratorio_aula_03_iped_mcp_pyjnius\caso_processado',
     [ValidateSet('0','1')][string]$PermitirMarcadores = '1'
 )
 $ErrorActionPreference = 'Stop'

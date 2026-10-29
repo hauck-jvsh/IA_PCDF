@@ -2,6 +2,8 @@
 from pathlib import Path
 import os
 import struct
+import dotenv
+dotenv.load_dotenv()
 
 home = Path(os.environ["JAVA_HOME"])
 handles = []

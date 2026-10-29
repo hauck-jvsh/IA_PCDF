@@ -7,7 +7,8 @@ from pathlib import Path
 import sys
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-
+import dotenv
+dotenv.load_dotenv()
 
 async def main(query, limit):
     params = StdioServerParameters(command=sys.executable,
